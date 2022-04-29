@@ -15,7 +15,7 @@
 		String GET_STUDENT_QUERY = "select * from student";
 		
 		Connection connection = DriverManager.getConnection
-				("jdbc:postgresql:sample?user=username&password=password");
+				("jdbc:postgresql:tritonlinkdb?user=username&password=password");
 		
 		Statement stmt = connection.createStatement();
 		
@@ -26,9 +26,9 @@
 		%>
 		
 		<span> Student id is <%= rs.getInt(1) %></span> <br />
-		<span> Name is <%= rs.getString(2)%></span><br/>
+		<span> Age is <%= rs.getInt(2)%></span><br/>
 		<span> Email is <%= rs.getString(3) %></span> <br/>
-		<span> Age is <%= rs.getInt(4) %></span><br/>
+		<span> Name is <%= rs.getString(4) %></span><br/>
 		<br/> <br/> <br/>
 			
 		<% }%>
