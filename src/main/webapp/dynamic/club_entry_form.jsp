@@ -11,7 +11,7 @@
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html" />
+			<jsp:include page="sidebar.html"/>
 		</div>
 		
 		<div class="club-form">
@@ -62,6 +62,8 @@
 				<form action="club_entry_form.jsp" method="post">
 					<input type="hidden" value="delete" name="action">
 					<input type="hidden" value="<%= rs.getString("sid") %>" name="sid">
+					<input type="hidden" value="<%= rs.getString("name") %>" name="name">
+					<input type="hidden" value="<%= rs.getString("role") %>" name="role">
 					<td><input type="submit" value="Delete"></td> 
 				</form>
 			</tr>
@@ -135,9 +137,12 @@
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement( "DELETE FROM club WHERE sid = ?");
+							PreparedStatement pstmt = conn.prepareStatement( "DELETE FROM club WHERE sid = ? AND name = ? AND role = ?");
 							
 							pstmt.setString(1, request.getParameter("sid"));
+							pstmt.setString(2, request.getParameter("name"));
+							pstmt.setString(3, request.getParameter("role"));
+
 
 							pstmt.executeUpdate();
 							conn.commit();
