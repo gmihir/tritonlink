@@ -8,26 +8,23 @@ html {
 
 
 body {
+	align-items: center;
 	color: #16123f;
 }
 
 .club-form {
-	width: 300px;
-	height: auto;
-	float: left;
+	width: 75vw;
+	margin: auto;
 }
 
-.form-table {
-	margin-left: auto;
-	margin-right: auto;
-}
 
 h1 {
-	text-align: left;
+	text-align: center;
 }
 
 /* Style inputs */
   input[type=text], select {
+  width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
