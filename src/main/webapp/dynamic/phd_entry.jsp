@@ -50,7 +50,9 @@
 		</tr>
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			String GET_STUDENT_QUERY = "select ssn, s.sid, first_name, middle_name, last_name, resident_status, enrollment_status, phd_type, advisor, dep_name from student s, phd p, candidate c where s.sid = c.sid and s.sid = p.sid";
+			String GET_STUDENT_QUERY = 
+					"select ssn, s.sid, first_name, middle_name, last_name, resident_status, enrollment_status, phd_type, advisor, dep_name from student s, phd p, candidate c where s.sid = c.sid and s.sid = p.sid UNION" 
+					+ " select ssn, s.sid, first_name, middle_name, last_name, resident_status, enrollment_status, phd_type, '' as advisor, dep_name from student s, phd p where s.sid = p.sid and s.sid not in(select sid from candidate);";
 			
 			Connection connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
