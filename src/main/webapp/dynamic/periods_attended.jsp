@@ -19,9 +19,9 @@
 		<h1>Periods Attended</h1>
 		<table class="form-table"> 
 			<tr>
-				<th>SID</th>
-				<th>Start QTR</th>
-				<th>Start Year</th>
+				<th>SID<sup>*</sup></th>
+				<th>Start QTR<sup>*</sup></th>
+				<th>Start Year<sup>*</sup></th>
 				<th>End QTR</th>
 				<th>End Year</th>
 			</tr>
