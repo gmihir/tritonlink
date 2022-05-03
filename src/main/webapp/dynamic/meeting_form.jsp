@@ -19,14 +19,14 @@
 		<h1>Meetings</h1>
 		<table class="form-table"> 
 			<tr>
-				<th>Class Title</th>
-				<th>Qtr</th>
-				<th>Year</th>
-				<th>Section ID</th>
-				<th>Room</th>
-				<th>Cron Date</th>
-				<th>Mandatory</th>
-				<th>Meeting Type</th>
+				<th>Class Title<sup>*</sup></th>
+				<th>Qtr<sup>*</sup></th>
+				<th>Year<sup>*</sup></th>
+				<th>Section ID<sup>*</sup></th>
+				<th>Room<sup>*</sup></th>
+				<th>Cron Date<sup>*</sup></th>
+				<th>Mandatory<sup>*</sup></th>
+				<th>Meeting Type<sup>*</sup></th>
 			</tr>
 			
 		<tr>
