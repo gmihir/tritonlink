@@ -6,7 +6,7 @@
 		<title>Periods Attended Form</title>
 		
 	    <style type="text/css">
-   		<%@include file="../css/periods_attended.css" %></style>
+   		<%@include file="../css/forms.css" %></style>
 		
 		<body>
 		
