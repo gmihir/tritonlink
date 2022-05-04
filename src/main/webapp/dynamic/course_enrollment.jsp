@@ -115,7 +115,7 @@
 							pstmt.setString(1, request.getParameter("class_title"));
 							pstmt.setString(2, request.getParameter("qtr"));
 							pstmt.setInt(3, Integer.parseInt(request.getParameter("year")));
-							pstmt.setString(4, request.getParameter("sectionid"));
+							pstmt.setString(4, request.getParameter("section_id"));
 							pstmt.setString(5, request.getParameter("sid"));
 							pstmt.setInt(6, Integer.parseInt(request.getParameter("units")));
 							pstmt.setString(7, request.getParameter("grade"));
@@ -140,11 +140,11 @@
 							
 							pstatement.setInt(1, Integer.parseInt(request.getParameter("units")));
 							pstatement.setString(2, request.getParameter("grade")); 
-							pstatement.setInt(2, Integer.parseInt(request.getParameter("class_title")));
-							pstatement.setString(3, request.getParameter("qtr")); 
-							pstatement.setInt(4, Integer.parseInt(request.getParameter("year"))); 
-							pstatement.setString(5, request.getParameter("section_id")); 
-							pstatement.setString(6, request.getParameter("sid")); 
+							pstatement.setString(3, request.getParameter("class_title"));
+							pstatement.setString(4, request.getParameter("qtr")); 
+							pstatement.setInt(5, Integer.parseInt(request.getParameter("year"))); 
+							pstatement.setString(6, request.getParameter("section_id")); 
+							pstatement.setString(7, request.getParameter("sid")); 
 
 							pstatement.executeUpdate();
 							conn.commit();
@@ -163,9 +163,9 @@
 							
 							pstmt.setString(1, request.getParameter("class_title"));
 							pstmt.setString(2, request.getParameter("qtr"));
-							pstmt.setString(3, request.getParameter("year"));
-							pstmt.setString(3, request.getParameter("section_id"));
-							pstmt.setString(3, request.getParameter("sid"));
+							pstmt.setInt(3, Integer.parseInt(request.getParameter("year")));
+							pstmt.setString(4, request.getParameter("section_id"));
+							pstmt.setString(5, request.getParameter("sid"));
 
 							pstmt.executeUpdate();
 							conn.commit();
