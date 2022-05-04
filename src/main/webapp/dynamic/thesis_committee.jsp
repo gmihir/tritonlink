@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Concetration Form</title>
+		<title>Thesis Committee</title>
 		
 	    <style type="text/css">
    		<%@include file="../css/forms.css" %></style>
@@ -17,31 +17,40 @@
 		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>
 		<h1>Concetrations</h1>
+		
+<!-- 		<div class="form-popup" id="myForm">
+		  <form action="thesis_committee.jsp" method="post" class="form-container">
+		    <h1 id='pop-up-header'>Add Faulty (comma separated)</h1>
+		    
+				<input type="text" id="faculty-text-box" value="" name="faculty">
+			
+		    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+		  </form>
+		</div> -->
+		
 		<table class="form-table"> 
 			<tr>
-				<th>Degree Name<sup>*</sup> </th>
-				<th>Degree Level<sup>*</sup></th>
-				<th>Concentration Name<sup>*</sup></th>
-				<th>Minimum Number of Courses<sup>*</sup></th>
-				<th>Minimum GPA<sup>*</sup></th>
+				<th>SID<sup>*</sup> </th>
+				<th>Faculty Name<sup>*</sup>
+				<br>(csv while inserting)</br>
+				</th>
 			</tr>
 			
 		<tr>
 			<form action="thesis_committee.jsp" method="post">
 				<input type="hidden" value="insert" name="action">
 				
-					<td><input type="text" value="" name="deg_name"></td> 
-					<td><input type="text" value="" name="deg_level"></td>
-					<td><input type="text" value="" name="con_name"></td>
-					<td><input type="number" value="" name="min_courses"></td>
-					<td><input step="0.01" type="number" value="" name="con_gpa"></td>
+					<td><input type="text" value="" name="sid"></td>
+					<td><input type="text" value="" name="faculty_name"></td>
+					<!-- <td><button type="button" class="open-button" onclick="openForm()">Add Faculty</button></td> -->
 					
 				<td><input type="submit" value="Insert"></td>
   			</form>
 		</tr>
+
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			String SELECT_QUERY = "select * from concentration";
+			String SELECT_QUERY = "select * from thesis_committee";
 			
 			Connection connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
@@ -58,22 +67,16 @@
 				<form action="thesis_committee.jsp" method="post">
 				<input type="hidden" value="update" name="action">
 				
-					<td><input readonly type="text" value="<%= rs.getString("deg_name") %>" name="deg_name"></td> 
-					<td><input readonly type="text" value="<%= rs.getString("deg_level") %>" name="deg_level"></td>
-					<td><input readonly type="text" value="<%= rs.getString("con_name") %>" name="con_name"></td>
-					<td><input type="text" value="<%= rs.getString("min_courses") %>" name="min_courses"></td>
-					<td><input type="text" value="<%= rs.getString("con_gpa") %>" name="con_gpa"></td>
+					<td><input readonly type="text" value="<%= rs.getString("sid") %>" name="sid"></td> 
+					<td><input readonly type="text" value="<%= rs.getString("faculty_name") %>" name="faculty_name"></td>
 				
-				<td><input type="submit" value="Update"></td>
+<!-- 				<td><input type="submit" value="Update"></td> -->
 				</form>
 				<form action="thesis_committee.jsp" method="post">
 				<input type="hidden" value="delete" name="action">
 				
-					<input type="hidden" value="<%= rs.getString("deg_name") %>" name="deg_name">
-					<input type="hidden" value="<%= rs.getString("deg_level") %>" name="deg_level">
-					<input type="hidden" value="<%= rs.getString("con_name") %>" name="con_name">
-					<input type="hidden" value="<%= rs.getString("min_courses") %>" name="min_courses">
-					<input type="hidden" value="<%= rs.getString("con_gpa") %>" name="con_gpa">
+					<input type="hidden" value="<%= rs.getString("sid") %>" name="sid">
+					<input type="hidden" value="<%= rs.getString("faculty_name") %>" name="faculty_name">
 				
 				<td><input type="submit" value="Delete"></td> 
 				</form>
@@ -99,17 +102,38 @@
 					%>
 					<% 
 						if (action != null && action.equals("insert")) {
+							System.out.println("In Insert");
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
-							// INSERT the student attrs INTO the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement( ("INSERT INTO concentration VALUES (?, ?, ?, ?, ?)"));
+							// INSERT the student attrs INTO the Student table.
 							
-							pstmt.setString(1, request.getParameter("deg_name")); 
-							pstmt.setString(2, request.getParameter("deg_level")); 
-							pstmt.setString(3, request.getParameter("con_name"));
-							pstmt.setDouble(4, Double.parseDouble(request.getParameter("min_courses"))); 
-							pstmt.setDouble(5, Double.parseDouble(request.getParameter("con_gpa")));
-
+							String stringStmt = "";
+							String[] faculty = request.getParameter("faculty_name").split("[,]", 0);
+							String sid = request.getParameter("sid");
+							
+							for(int i = 0; i < faculty.length; i++) {
+								if(i == faculty.length-1){
+									stringStmt += "INSERT INTO thesis_committee VALUES (?, ?)";
+								}
+								else{
+									stringStmt += "INSERT INTO thesis_committee VALUES (?, ?); ";
+								}
+					       	}
+							
+							PreparedStatement pstmt = conn.prepareStatement(stringStmt);
+							
+							int sidIndex = 1;
+							int facultyIndex = 2;
+							for(int i = 0; i < faculty.length; i++) {
+								System.out.println(faculty[i]);
+								
+								pstmt.setString(sidIndex, sid);
+								pstmt.setString(facultyIndex, faculty[i]);
+								
+								sidIndex += 2;
+								facultyIndex += 2;
+					       	}
+							
 							pstmt.executeUpdate();
 							conn.commit();
 							conn.setAutoCommit(true);
@@ -120,7 +144,7 @@
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
 							response.sendRedirect("thesis_committee.jsp"); 
 						}
-						else if (action != null && action.equals("update")) {
+/* 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
@@ -143,16 +167,15 @@
 							conn.close();
 							
 							response.sendRedirect("thesis_committee.jsp"); 
-						}
+						} */
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement("DELETE FROM concentration WHERE deg_name = ? AND deg_level = ? AND con_name = ?");
+							PreparedStatement pstmt = conn.prepareStatement("DELETE FROM thesis_committee WHERE sid = ? AND faculty_name = ?");
 							
-							pstmt.setString(1, request.getParameter("deg_name")); 
-							pstmt.setString(2, request.getParameter("deg_level")); 
-							pstmt.setString(3, request.getParameter("con_name"));
+							pstmt.setString(1, request.getParameter("sid"));
+							pstmt.setString(2, request.getParameter("faculty_name"));
 
 							pstmt.executeUpdate();
 							conn.commit();
@@ -171,7 +194,15 @@
 				}
 				
 				%>
-			
+<!-- 		<script>
+				function openForm() {
+				  document.getElementById("myForm").style.display = "block";
+				}
+	
+				function closeForm() {
+				  document.getElementById("myForm").style.display = "none";
+				}
+		</script> -->
 		</body>
 	</head>
 </html>
