@@ -2,7 +2,7 @@
 
 ## How to build project
 
-First, you will need to install Eclipse and create a new dynamic web project. Then, get the files we have created and import them into your project. Next, you should install PostgreSQL locally, as well as Apache Tomcat v.9.0. Then, just click run in Eclipse!
+First, you will need to install Eclipse and create a new dynamic web project. Then, get the files we have created and import them into your project. Next, you should install PostgreSQL locally, as well as Apache Tomcat v.9.0. Then, just navigate to home.jsp click run in Eclipse!
 
 ## The Forms
 
