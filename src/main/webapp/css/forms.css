@@ -8,11 +8,13 @@ html {
 
 
 body {
+	align-items: center;
 	color: #16123f;
 }
 
 .form {
-	width: 300px;
+	width: 75vw;
+	margin: auto;
 	height: auto;
 	float: left;
 }
@@ -23,11 +25,12 @@ body {
 }
 
 h1 {
-	text-align: left;
+	text-align: center;
 }
 
 /* Style inputs */
   input, select {
+  width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;

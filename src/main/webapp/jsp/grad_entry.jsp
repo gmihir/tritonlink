@@ -6,17 +6,19 @@
 		<title>Graduate Entry Form</title>
 		
 	    <style type="text/css">
-   		<%@include file="../css/phd_entry.css" %></style>
+   		<%@include file="../css/forms.css" %></style>
 		
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
+		
+		<h1>Graduate Entry</h1>
 		
 		<div class="degree-form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Graduate Entry</h1>
+
 		<table class="form-table"> 
 			<tr>
 				<th>SSN</th>
@@ -106,7 +108,6 @@
 			
 				<%
 					try {
-						System.out.println("109");
 						// Load Postgres Driver class file 
 						DriverManager.registerDriver(new org.postgresql.Driver());
 						

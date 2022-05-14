@@ -6,17 +6,19 @@
 		<title>Undergrad Entry Form</title>
 		
 	    <style type="text/css">
-   		<%@include file="../css/undergrad_entry.css" %></style>
+   		<%@include file="../css/forms.css" %></style>
 		
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
+		
+		<h1>Undergrad Entry</h1>
 		
 		<div class="degree-form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Undergrad Entry</h1>
+
 		<table class="form-table"> 
 			<tr>
 				<th>SSN</th>
@@ -109,7 +111,6 @@
 			
 				<%
 					try {
-						System.out.println("109");
 						// Load Postgres Driver class file 
 						DriverManager.registerDriver(new org.postgresql.Driver());
 						
@@ -127,13 +128,7 @@
 							// INSERT the student attrs INTO the Student table. 
 							PreparedStatement pstmt = conn.prepareStatement( ("INSERT INTO student VALUES (?, ?, ?, ?, ?, ?, ?); " + 
 							 	" INSERT INTO college VALUES (?,?); INSERT INTO major VALUES (?,?); INSERT INTO minor VALUES (?,?);"));
-							
-							System.out.println("here:");
-							System.out.println(request.getParameter("ssn"));
-							System.out.println(request.getParameter("sid"));
-							System.out.println(request.getParameter("first_name"));
 
-							
 							pstmt.setInt(1,Integer.parseInt(request.getParameter("ssn"))); 
 							pstmt.setString(2, request.getParameter("sid"));
 							pstmt.setString(3,request.getParameter("first_name")); 
@@ -197,7 +192,6 @@
 							response.sendRedirect("undergrad_entry.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
-							System.out.println("in delete");
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 

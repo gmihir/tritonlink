@@ -11,12 +11,14 @@
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
+		
+		<h1>Meetings</h1>
 		
 		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Meetings</h1>
+
 		<table class="form-table"> 
 			<tr>
 				<th>Class Title<sup>*</sup></th>

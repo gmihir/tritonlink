@@ -6,17 +6,19 @@
 		<title>Classes Previously Taken Entry</title>
 		
 	    <style type="text/css">
-   		<%@include file="../css/past_classes.css" %></style>
+   		<%@include file="../css/forms.css" %></style>
 		
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
+		
+		<h1>Classes Previously Taken</h1>
 		
 		<div class="degree-form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Classes Previously Taken</h1>
+
 		<table class="form-table"> 
 			<tr>
 				<th>Student ID</th>

@@ -6,17 +6,19 @@
 		<title>Prerequisite Entry Form</title>
 		
 	    <style type="text/css">
-   		<%@include file="../css/prereq_entry.css" %></style>
+   		<%@include file="../css/forms.css" %></style>
 		
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
+		
+		<h1>Prerequisite Entry</h1>
 		
 		<div class="degree-form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Prerequisite Entry</h1>
+
 		<table class="form-table"> 
 			<tr>
 				<th>Course ID</th>
