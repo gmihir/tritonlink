@@ -108,7 +108,6 @@
 			
 				<%
 					try {
-						System.out.println("109");
 						// Load Postgres Driver class file 
 						DriverManager.registerDriver(new org.postgresql.Driver());
 						

@@ -113,7 +113,6 @@
 			
 				<%
 					try {
-						System.out.println("109");
 						// Load Postgres Driver class file 
 						DriverManager.registerDriver(new org.postgresql.Driver());
 						
@@ -132,10 +131,6 @@
 							PreparedStatement pstmt = conn.prepareStatement("INSERT INTO student VALUES (?, ?, ?, ?, ?, ?, ?); " + 
 							 	" INSERT INTO phd VALUES (?,?,?); INSERT INTO candidate VALUES (?,?);");
 							
-							System.out.println("ssn:");
-							System.out.println(request.getParameter("ssn"));
-							
-							
 							pstmt.setInt(1,Integer.parseInt(request.getParameter("ssn"))); 
 							pstmt.setString(2, request.getParameter("sid"));
 							pstmt.setString(3,request.getParameter("first_name")); 
@@ -151,9 +146,6 @@
 							
 							pstmt.setString(11, request.getParameter("sid"));
 							pstmt.setString(12,request.getParameter("advisor")); 
-							
-							System.out.println("here:");
-							System.out.println(pstmt);
 							
 							pstmt.executeUpdate();
 							conn.commit();
@@ -199,7 +191,6 @@
 							response.sendRedirect("phd_entry.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
-							System.out.println("in delete");
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 

@@ -49,8 +49,6 @@
 			ResultSet rs = stmt.executeQuery(GET_DEGREE_QUERY);
 			
 			while(rs.next()) {
-				System.out.println("deg_levl:");
-				System.out.println(rs.getString("deg_level"));
 			%>
 			
 			<tr>
