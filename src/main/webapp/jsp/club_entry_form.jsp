@@ -6,76 +6,73 @@
 		<title>Club Entry Form</title>
 		
 	    <style type="text/css">
-   		<%@include file="../css/previous_degree_form.css" %></style>
+   		<%@include file="../css/forms.css" %></style>
 		
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
 		
-		<div class="degree-form">
+		<h1>Clubs</h1>
+		
+		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Previous Degrees</h1>
+
 		<table class="form-table"> 
 			<tr>
 				<th>Student ID</th>
-				<th>Institution</th>
-				<th>Level</th>
-				<th>Degree Name</th>
+				<th>Club Name</th>
+				<th>Role</th>
 			</tr>
 			
 		<tr>
-			<form action="previous_degree_form.jsp" method="post">
+			<form action="club_entry_form.jsp" method="post">
 				<input type="hidden" value="insert" name="action"> 
 					<td> <input type="text" value="" name="sid"></td> 
-					<td><input type="text" value="" name="institution"></td> 
-					<td><input type="text" value="" name="level"></td>
-					<td><input type="text" value="" name="previous_degree_name"></td>  
+					<td><input type="text" value="" name="name"></td> 
+					<td><input type="text" value="" name="role"></td> 
 					<td><input type="submit" value="Insert"></td>
   			</form>
 		</tr>
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			String GET_DEGREE_QUERY = "select * from previous_degrees";
+			String GET_STUDENT_QUERY = "select * from club";
 			
 			Connection connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
 			
 			Statement stmt = connection.createStatement();
 			
-			ResultSet rs = stmt.executeQuery(GET_DEGREE_QUERY);
+			ResultSet rs = stmt.executeQuery(GET_STUDENT_QUERY);
 			
 			while(rs.next()) {
 				
 			%>
 			
 			<tr>
-				<form action="previous_degree_form.jsp" method="post">
+				<form action="club_entry_form.jsp" method="post">
 				
 				<input type="hidden" value="update" name="action"> 
 					<td><input type="text" value="<%= rs.getString("sid") %>" name="sid"></td> 
-					<td><input type="text" value="<%= rs.getString("institution") %>" name="institution"></td>
-					<td><input type="text" value="<%= rs.getString("level") %>" name="level"></td>
-					<td><input type="text" value="<%= rs.getString("previous_degree_name") %>" name="previous_degree_name"></td>
+					<td><input type="text" value="<%= rs.getString("name") %>" name="name"></td>
+					<td><input type="text" value="<%= rs.getString("role") %>" name="role"></td>
 					<td><input type="submit" value="Update"></td>
 					
 				</form>
 				
-				<form action="previous_degree_form.jsp" method="post">
+				<form action="club_entry_form.jsp" method="post">
 					<input type="hidden" value="delete" name="action">
 					<input type="hidden" value="<%= rs.getString("sid") %>" name="sid">
-					<input type="hidden" value="<%= rs.getString("institution") %>" name="institution">
-					<input type="hidden" value="<%= rs.getString("level") %>" name="level">
-					<input type="hidden" value="<%= rs.getString("previous_degree_name") %>" name="previous_degree_name">
+					<input type="hidden" value="<%= rs.getString("name") %>" name="name">
+					<input type="hidden" value="<%= rs.getString("role") %>" name="role">
 					<td><input type="submit" value="Delete"></td> 
 				</form>
 			</tr>
 			<% }
-			rs.close();
-			connection.close();
+				connection.close();
 			%>
-	
+		
 			</table>
 		</div>
 			
@@ -98,14 +95,16 @@
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
 							// INSERT the student attrs INTO the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement( ("INSERT INTO previous_degrees VALUES (?, ?, ?, ?)"));
+							PreparedStatement pstmt = conn.prepareStatement( ("INSERT INTO club VALUES (?, ?, ?)"));
 							
+							System.out.println(request.getParameter("sid"));
+							System.out.println(request.getParameter("name"));
+							System.out.println(request.getParameter("role"));
+
 							
 							pstmt.setString(1,request.getParameter("sid")); 
-							pstmt.setString(2,request.getParameter("institution")); 
-							pstmt.setString(3,request.getParameter("level")); 
-							pstmt.setString(4,request.getParameter("previous_degree_name")); 
-
+							pstmt.setString(2,request.getParameter("name")); 
+							pstmt.setString(3,request.getParameter("role")); 
 
 							pstmt.executeUpdate();
 							conn.commit();
@@ -115,20 +114,18 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("previous_degree_form.jsp"); 
+							response.sendRedirect("club_entry_form.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
 							// UPDATE the student attributes in the Student table. 
-							PreparedStatement pstatement = conn.prepareStatement("UPDATE previous_degrees SET institution = ?, " 
-							+ "level = ?, previous_degree_name = ? WHERE sid = ?");
+							PreparedStatement pstatement = conn.prepareStatement("UPDATE club SET name = ?, " + "role = ? WHERE sid = ?");
 							
-							pstatement.setString(1, request.getParameter("institution"));
-							pstatement.setString(2, request.getParameter("level"));
-							pstatement.setString(3, request.getParameter("previous_degree_name")); 
-							pstatement.setString(4, request.getParameter("sid")); 
+							pstatement.setString(1, request.getParameter("name"));
+							pstatement.setString(2, request.getParameter("role"));
+							pstatement.setString(3, request.getParameter("sid")); 
 
 							
 							pstatement.executeUpdate();
@@ -138,19 +135,17 @@
 							pstatement.close();
 							conn.close();
 							
-							response.sendRedirect("previous_degree_form.jsp"); 
+							response.sendRedirect("club_entry_form.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement( "DELETE FROM previous_degrees WHERE sid = ? AND institution = ?" + 
-									" AND level = ? AND previous_degree_name = ?");
+							PreparedStatement pstmt = conn.prepareStatement( "DELETE FROM club WHERE sid = ? AND name = ? AND role = ?");
 							
 							pstmt.setString(1, request.getParameter("sid"));
-							pstmt.setString(2, request.getParameter("institution"));
-							pstmt.setString(3, request.getParameter("level"));
-							pstmt.setString(4, request.getParameter("previous_degree_name"));
+							pstmt.setString(2, request.getParameter("name"));
+							pstmt.setString(3, request.getParameter("role"));
 
 
 							pstmt.executeUpdate();
@@ -161,7 +156,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("previous_degree_form.jsp"); 
+							response.sendRedirect("club_entry_form.jsp"); 
 						}
 					}
 				catch(Exception e) {

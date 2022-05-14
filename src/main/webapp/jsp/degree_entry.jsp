@@ -3,71 +3,80 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Club Entry Form</title>
+		<title>Degree Entry Form</title>
 		
 	    <style type="text/css">
-   		<%@include file="../css/club_entry.css" %></style>
+   		<%@include file="../css/forms.css" %></style>
 		
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
 		
-		<div class="club-form">
+		<h1>Degree Entry</h1>
+		
+		<div class="degree-form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Clubs</h1>
+		
 		<table class="form-table"> 
 			<tr>
-				<th>Student ID</th>
-				<th>Club Name</th>
-				<th>Role</th>
+				<th>Name</th>
+				<th>Level</th>
+				<th>Min Units</th>
+				<th>Department</th>
 			</tr>
 			
 		<tr>
-			<form action="club_entry_form.jsp" method="post">
+			<form action="degree_entry.jsp" method="post">
 				<input type="hidden" value="insert" name="action"> 
-					<td> <input type="text" value="" name="sid"></td> 
-					<td><input type="text" value="" name="name"></td> 
-					<td><input type="text" value="" name="role"></td> 
+					<td> <input type="text" value="" name="deg_name"></td> 
+					<td><input type="text" value="" name="deg_level"></td> 
+					<td><input type="number" value="" name="min_units"></td> 
+					<td><input type="text" value="" name="dep_name"></td> 
 					<td><input type="submit" value="Insert"></td>
   			</form>
 		</tr>
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			String GET_STUDENT_QUERY = "select * from club";
+			String GET_DEGREE_QUERY = "select * from degree";
 			
 			Connection connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
 			
 			Statement stmt = connection.createStatement();
 			
-			ResultSet rs = stmt.executeQuery(GET_STUDENT_QUERY);
+			ResultSet rs = stmt.executeQuery(GET_DEGREE_QUERY);
 			
 			while(rs.next()) {
-				
+				System.out.println("deg_levl:");
+				System.out.println(rs.getString("deg_level"));
 			%>
 			
 			<tr>
-				<form action="club_entry_form.jsp" method="post">
+				<form action="degree_entry.jsp" method="post">
 				
 				<input type="hidden" value="update" name="action"> 
-					<td><input type="text" value="<%= rs.getString("sid") %>" name="sid"></td> 
-					<td><input type="text" value="<%= rs.getString("name") %>" name="name"></td>
-					<td><input type="text" value="<%= rs.getString("role") %>" name="role"></td>
+					<td><input readonly type="text" value="<%= rs.getString("deg_name") %>" name="deg_name"></td> 
+					<td><input readonly type="text" value="<%= rs.getString("deg_level") %>" name="deg_level"></td>
+					<td><input type="number" value="<%= rs.getString("min_units") %>" name="min_units"></td>
+					<td><input type="text" value="<%= rs.getString("dep_name") %>" name="dep_name"></td>
 					<td><input type="submit" value="Update"></td>
 					
 				</form>
-				
-				<form action="club_entry_form.jsp" method="post">
+
+				<form action="degree_entry.jsp" method="post">
 					<input type="hidden" value="delete" name="action">
-					<input type="hidden" value="<%= rs.getString("sid") %>" name="sid">
-					<input type="hidden" value="<%= rs.getString("name") %>" name="name">
-					<input type="hidden" value="<%= rs.getString("role") %>" name="role">
+					<input type="hidden" value="<%= rs.getString("deg_name") %>" name="deg_name">
+					<input type="hidden" value="<%= rs.getString("deg_level") %>" name="deg_level">
+					<input type="hidden" value="<%= rs.getString("min_units") %>" name="min_units">
+					<input type="hidden" value="<%= rs.getString("dep_name") %>" name="dep_name">
+
 					<td><input type="submit" value="Delete"></td> 
 				</form>
 			</tr>
 			<% }
+				rs.close();
 				connection.close();
 			%>
 		
@@ -93,16 +102,13 @@
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
 							// INSERT the student attrs INTO the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement( ("INSERT INTO club VALUES (?, ?, ?)"));
+							PreparedStatement pstmt = conn.prepareStatement("INSERT INTO degree VALUES (?,?, ?, ?); ");
+														
 							
-							System.out.println(request.getParameter("sid"));
-							System.out.println(request.getParameter("name"));
-							System.out.println(request.getParameter("role"));
-
-							
-							pstmt.setString(1,request.getParameter("sid")); 
-							pstmt.setString(2,request.getParameter("name")); 
-							pstmt.setString(3,request.getParameter("role")); 
+							pstmt.setString(1, request.getParameter("deg_name"));
+							pstmt.setString(2,request.getParameter("deg_level")); 
+							pstmt.setInt(3,Integer.parseInt(request.getParameter("min_units"))); 
+							pstmt.setString(4,request.getParameter("dep_name")); 
 
 							pstmt.executeUpdate();
 							conn.commit();
@@ -112,20 +118,19 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("club_entry_form.jsp"); 
+							response.sendRedirect("degree_entry.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
-							System.out.println("in update");
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
 							// UPDATE the student attributes in the Student table. 
-							PreparedStatement pstatement = conn.prepareStatement("UPDATE club SET name = ?, " + "role = ? WHERE sid = ?");
+							PreparedStatement pstatement = conn.prepareStatement("UPDATE degree SET min_units = ?, dep_name = ? WHERE deg_name =  ? AND deg_level = ?");
 							
-							pstatement.setString(1, request.getParameter("name"));
-							pstatement.setString(2, request.getParameter("role"));
-							pstatement.setString(3, request.getParameter("sid")); 
+							pstatement.setInt(1, Integer.parseInt(request.getParameter("min_units")));
+							pstatement.setString(2, request.getParameter("dep_name"));
+							pstatement.setString(3, request.getParameter("deg_name")); 
+							pstatement.setString(4, request.getParameter("deg_level")); 
 
-							
 							pstatement.executeUpdate();
 							conn.commit();
 							conn.setAutoCommit(true);
@@ -133,18 +138,16 @@
 							pstatement.close();
 							conn.close();
 							
-							response.sendRedirect("club_entry_form.jsp"); 
+							response.sendRedirect("degree_entry.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement( "DELETE FROM club WHERE sid = ? AND name = ? AND role = ?");
+							PreparedStatement pstmt = conn.prepareStatement( "DELETE FROM degree WHERE deg_name = ? AND deg_level = ?");
 							
-							pstmt.setString(1, request.getParameter("sid"));
-							pstmt.setString(2, request.getParameter("name"));
-							pstmt.setString(3, request.getParameter("role"));
-
+							pstmt.setString(1, request.getParameter("deg_name"));
+							pstmt.setString(2, request.getParameter("deg_level"));
 
 							pstmt.executeUpdate();
 							conn.commit();
@@ -154,7 +157,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("club_entry_form.jsp"); 
+							response.sendRedirect("degree_entry.jsp"); 
 						}
 					}
 				catch(Exception e) {

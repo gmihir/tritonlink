@@ -6,17 +6,19 @@
 		<title>Course Enrollment Form</title>
 		
 	    <style type="text/css">
-   		<%@include file="../css/course_enrollment.css" %></style>
+   		<%@include file="../css/forms.css" %></style>
 		
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
+		
+		<h1>Course Enrollment Form</h1>
 		
 		<div class="degree-form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Course Enrollment Form</h1>
+
 		<table class="form-table"> 
 			<tr>
 				<th>Student ID</th>

@@ -3,20 +3,22 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>PhD Entry Form</title>
+		<title>Graduate Entry Form</title>
 		
 	    <style type="text/css">
-   		<%@include file="../css/phd_entry.css" %></style>
+   		<%@include file="../css/forms.css" %></style>
 		
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
+		
+		<h1>Graduate Entry</h1>
 		
 		<div class="degree-form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>PhD Entry</h1>
+
 		<table class="form-table"> 
 			<tr>
 				<th>SSN</th>
@@ -26,14 +28,13 @@
 				<th>Last Name</th>
 				<th>Resident Status</th>
 				<th>Enrollment Status</th>
-				<th>PhD Type</th>
-				<th>Advisor</th>
+				<th>Grad Type</th>
 				<th>Department</th>
 
 			</tr>
 			
 		<tr>
-			<form action="phd_entry.jsp" method="post">
+			<form action="grad_entry.jsp" method="post">
 				<input type="hidden" value="insert" name="action"> 
 					<td><input type="number" value="" name="ssn"></td>  				
 					<td> <input type="text" value="" name="sid"></td> 
@@ -42,30 +43,28 @@
 					<td><input type="text" value="" name="last_name"></td> 
 					<td><input type="text" value="" name="resident_status"></td> 
 					<td><input type="text" value="" name="enrollment_status"></td> 
-					<td><input type="text" value="" name="phd_type"></td> 
-					<td><input type="text" value="" name="advisor"></td> 
+					<td><input type="text" value="" name="grad_type"></td> 
 					<td><input type="text" value="" name="dep_name"></td> 
 					<td><input type="submit" value="Insert"></td>
   			</form>
 		</tr>
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			String GET_STUDENT_QUERY = 
-					"select ssn, s.sid, first_name, middle_name, last_name, resident_status, enrollment_status, phd_type, advisor, dep_name from student s, phd p, candidate c where s.sid = c.sid and s.sid = p.sid UNION" 
-					+ " select ssn, s.sid, first_name, middle_name, last_name, resident_status, enrollment_status, phd_type, '' as advisor, dep_name from student s, phd p where s.sid = p.sid and s.sid not in(select sid from candidate);";
+			String GET_GRAD_QUERY = 
+					"select ssn, s.sid, first_name, middle_name, last_name, resident_status, enrollment_status, grad_type, dep_name from student s, grad g where s.sid = g.sid";
 			
 			Connection connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
 			
 			Statement stmt = connection.createStatement();
 			
-			ResultSet rs = stmt.executeQuery(GET_STUDENT_QUERY);
+			ResultSet rs = stmt.executeQuery(GET_GRAD_QUERY);
 			
 			while(rs.next()) {
 			%>
 			
 			<tr>
-				<form action="phd_entry.jsp" method="post">
+				<form action="grad_entry.jsp" method="post">
 				
 				<input type="hidden" value="update" name="action"> 
 					<td><input readonly type="text" value="<%= rs.getString("ssn") %>" name="ssn"></td> 
@@ -75,15 +74,14 @@
 					<td><input type="text" value="<%= rs.getString("last_name") %>" name="last_name"></td>
 					<td><input type="text" value="<%= rs.getString("resident_status") %>" name="resident_status"></td>
 					<td><input type="text" value="<%= rs.getString("enrollment_status") %>" name="enrollment_status"></td>
-					<td><input type="text" value="<%= rs.getString("phd_type") %>" name="phd_type"></td>
-					<td><input type="text" value="<%= rs.getString("advisor") %>" name="advisor"></td>
+					<td><input type="text" value="<%= rs.getString("grad_type") %>" name="grad_type"></td>
 					<td><input type="text" value="<%= rs.getString("dep_name") %>" name="dep_name"></td>
 
 					<td><input type="submit" value="Update"></td>
 					
 				</form>
 
-				<form action="phd_entry.jsp" method="post">
+				<form action="grad_entry.jsp" method="post">
 					<input type="hidden" value="delete" name="action">
 					<input type="hidden" value="<%= rs.getString("ssn") %>" name="ssn">
 					<input type="hidden" value="<%= rs.getString("sid") %>" name="sid">
@@ -92,16 +90,15 @@
 					<input type="hidden" value="<%= rs.getString("last_name") %>" name="last_name">
 					<input type="hidden" value="<%= rs.getString("resident_status") %>" name="resident_status">
 					<input type="hidden" value="<%= rs.getString("enrollment_status") %>" name="enrollment_status">
-					<input type="hidden" value="<%= rs.getString("phd_type") %>" name="phd_type">
-					<input type="hidden" value="<%= rs.getString("advisor") %>" name="advisor">
+					<input type="hidden" value="<%= rs.getString("grad_type") %>" name="grad_type">
 					<input type="hidden" value="<%= rs.getString("dep_name") %>" name="dep_name">
 
 					<td><input type="submit" value="Delete"></td> 
 				</form>
 			</tr>
 			<% }
-			rs.close();
-			connection.close();
+				rs.close();
+				connection.close();
 			%>
 		
 			</table>
@@ -128,11 +125,8 @@
 							// Create the prepared statement and use it to
 							// INSERT the student attrs INTO the Student table. 
 							PreparedStatement pstmt = conn.prepareStatement("INSERT INTO student VALUES (?, ?, ?, ?, ?, ?, ?); " + 
-							 	" INSERT INTO phd VALUES (?,?,?); INSERT INTO candidate VALUES (?,?);");
-							
-							System.out.println("ssn:");
-							System.out.println(request.getParameter("ssn"));
-							
+							 	" INSERT INTO grad VALUES (?,?,?);");
+									
 							
 							pstmt.setInt(1,Integer.parseInt(request.getParameter("ssn"))); 
 							pstmt.setString(2, request.getParameter("sid"));
@@ -143,15 +137,9 @@
 							pstmt.setString(7,request.getParameter("enrollment_status")); 
 
 							pstmt.setString(8, request.getParameter("sid"));
-							pstmt.setString(9,request.getParameter("phd_type"));
+							pstmt.setString(9,request.getParameter("grad_type"));
 							pstmt.setString(10,request.getParameter("dep_name"));
 
-							
-							pstmt.setString(11, request.getParameter("sid"));
-							pstmt.setString(12,request.getParameter("advisor")); 
-							
-							System.out.println("here:");
-							System.out.println(pstmt);
 							
 							pstmt.executeUpdate();
 							conn.commit();
@@ -161,7 +149,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("phd_entry.jsp"); 
+							response.sendRedirect("grad_entry.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
 							conn.setAutoCommit(false);
@@ -169,7 +157,7 @@
 							// UPDATE the student attributes in the Student table. 
 							PreparedStatement pstatement = conn.prepareStatement("UPDATE student SET first_name = ?, " 
 							+ "middle_name = ?, last_name = ?, resident_status = ?, enrollment_status = ? WHERE sid = ?;"
-							+ "UPDATE phd SET phd_type = ?, dep_name = ? WHERE sid = ?; UPDATE candidate SET advisor = ? WHERE sid = ?;");
+							+ "UPDATE grad SET grad_type = ?, dep_name = ? WHERE sid = ?;");
 							
 							pstatement.setString(1, request.getParameter("first_name"));
 							pstatement.setString(2, request.getParameter("middle_name"));
@@ -178,14 +166,10 @@
 							pstatement.setString(5, request.getParameter("enrollment_status")); 
 							pstatement.setString(6, request.getParameter("sid")); 
 							
-							pstatement.setString(7, request.getParameter("phd_type")); 
+							pstatement.setString(7, request.getParameter("grad_type")); 
 							pstatement.setString(8, request.getParameter("dep_name"));
 							pstatement.setString(9, request.getParameter("sid")); 
 	
-							pstatement.setString(10, request.getParameter("advisor")); 
-							pstatement.setString(11, request.getParameter("sid")); 
-							
-
 							
 							pstatement.executeUpdate();
 							conn.commit();
@@ -194,10 +178,9 @@
 							pstatement.close();
 							conn.close();
 							
-							response.sendRedirect("phd_entry.jsp"); 
+							response.sendRedirect("grad_entry.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
-							System.out.println("in delete");
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 
@@ -213,7 +196,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("phd_entry.jsp"); 
+							response.sendRedirect("grad_entry.jsp"); 
 						}
 					}
 				catch(Exception e) {

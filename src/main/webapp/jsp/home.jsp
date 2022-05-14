@@ -10,11 +10,11 @@
 		
 		<body>
 		
-		<h1>Home Page</h1>
-		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
+		
+		<h1>Home Page</h1>
 		
 		</body>
 	</head>

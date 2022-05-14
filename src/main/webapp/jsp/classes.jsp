@@ -11,12 +11,14 @@
 		<body>
 		
 		<div class="sidebar-insert">
-			<jsp:include page="sidebar.html"/>
+			<jsp:include page="../html/sidebar.html"/>
 		</div>
+		
+		<h1>Classes</h1>
 		
 		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Classes</h1>
+
 		
 <!-- 		<div class="form-popup" id="myForm">
 		  <form action="thesis_committee.jsp" method="post" class="form-container">
