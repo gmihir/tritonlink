@@ -16,7 +16,7 @@
 		
 		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Concetrations</h1>
+		<h1>Thesis Committee</h1>
 		
 <!-- 		<div class="form-popup" id="myForm">
 		  <form action="thesis_committee.jsp" method="post" class="form-container">
