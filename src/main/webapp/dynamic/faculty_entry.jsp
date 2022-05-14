@@ -67,7 +67,10 @@
 					<td><input type="submit" value="Delete"></td> 
 				</form>
 			</tr>
-			<% }%>
+			<% }
+				rs.close();
+				connection.close();
+			%>
 		
 			</table>
 		</div>

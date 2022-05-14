@@ -40,6 +40,9 @@
 			
 			ResultSet rs = stmt.executeQuery(GET_FACULTY_QUERY);
 			
+			Connection conn = null;
+			PreparedStatement pstmt = null;
+			
 			while(rs.next()) {
 			%>
 			
@@ -58,7 +61,11 @@
 					<td><input type="submit" value="Delete"></td> 
 				</form>
 			</tr>
-			<% }%>
+			<% 
+			}
+			rs.close();
+			connection.close();
+			%>
 		
 			</table>
 		</div>
@@ -71,7 +78,7 @@
 						DriverManager.registerDriver(new org.postgresql.Driver());
 						
 						// Make a connection to the postgres datasource 
-						Connection conn = DriverManager.getConnection
+						conn = DriverManager.getConnection
 								("jdbc:postgresql:tritonlinkdb?user=username&password=password");
 						
 						// Check if an insertion is requested
@@ -82,18 +89,13 @@
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
 							// INSERT the student attrs INTO the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement("INSERT INTO department VALUES (?); ");
+							pstmt = conn.prepareStatement("INSERT INTO department VALUES (?); ");
 														
-							
-
 							pstmt.setString(1,request.getParameter("dep_name")); 
 							
 							pstmt.executeUpdate();
 							conn.commit();
 							conn.setAutoCommit(true);
-
-							pstmt.close();
-							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
 							response.sendRedirect("department_entry.jsp"); 
@@ -122,16 +124,13 @@
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement( "DELETE FROM department WHERE dep_name = ?");
+							pstmt = conn.prepareStatement( "DELETE FROM department WHERE dep_name = ?");
 							
 							pstmt.setString(1, request.getParameter("dep_name"));
 
 							pstmt.executeUpdate();
 							conn.commit();
 							conn.setAutoCommit(true);
-
-							pstmt.close();
-							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
 							response.sendRedirect("department_entry.jsp"); 
@@ -141,7 +140,13 @@
 					System.out.println("error:");
 					System.out.println(e.toString());
 				}
-				
+				finally {
+					try { rs.close(); } catch (Exception e) { /* Ignored */ }
+					try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+				    try { pstmt.close(); } catch (Exception e) { /* Ignored */ }
+				    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+				    
+				}
 				%>
 			
 		</body>

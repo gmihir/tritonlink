@@ -53,6 +53,10 @@
 			
 			ResultSet rs = stmt.executeQuery(SELECT_QUERY);
 			
+			Connection conn = null;
+			
+			PreparedStatement pstmt = null;
+			
 			while(rs.next()) {
 				
 			%>
@@ -96,7 +100,7 @@
 						DriverManager.registerDriver(new org.postgresql.Driver());
 						
 						// Make a connection to the postgres datasource 
-						Connection conn = DriverManager.getConnection
+						conn = DriverManager.getConnection
 								("jdbc:postgresql:tritonlinkdb?user=username&password=password");
 						
 						// Check if an insertion is requested
@@ -120,7 +124,7 @@
 								}
 					       	}
 							
-							PreparedStatement pstmt = conn.prepareStatement(statement);
+							pstmt = conn.prepareStatement(statement);
 							
 							int pstmtIndex = 1;
 							for(int i = 0; i < courses.length; i++) {
@@ -142,9 +146,6 @@
 							conn.commit();
 							conn.setAutoCommit(true);
 
-							pstmt.close();
-							conn.close();
-
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
 							response.sendRedirect("categories.jsp"); 
 						}
@@ -153,7 +154,7 @@
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
 							// UPDATE the student attributes in the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement("UPDATE categories SET min_units = ?, cat_gpa = ? WHERE course_id = ? AND deg_name = ? AND deg_level = ? AND cat_name = ?");
+							pstmt = conn.prepareStatement("UPDATE categories SET min_units = ?, cat_gpa = ? WHERE course_id = ? AND deg_name = ? AND deg_level = ? AND cat_name = ?");
 							
 							pstmt.setInt(1, Integer.parseInt(request.getParameter("min_units"))); 
 							pstmt.setDouble(2, Double.parseDouble(request.getParameter("cat_gpa")));
@@ -168,16 +169,13 @@
 							conn.commit();
 							conn.setAutoCommit(true);
 							
-							pstmt.close();
-							conn.close();
-							
 							response.sendRedirect("categories.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement("DELETE FROM categories WHERE deg_name = ? AND deg_level = ? AND cat_name = ? AND course_id = ?");
+							pstmt = conn.prepareStatement("DELETE FROM categories WHERE deg_name = ? AND deg_level = ? AND cat_name = ? AND course_id = ?");
 							
 							pstmt.setString(1, request.getParameter("deg_name")); 
 							pstmt.setString(2, request.getParameter("deg_level")); 
@@ -188,9 +186,6 @@
 							conn.commit();
 							conn.setAutoCommit(true);
 
-							pstmt.close();
-							conn.close();
-
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
 							response.sendRedirect("categories.jsp"); 
 						}
@@ -199,7 +194,13 @@
 					System.out.println("error:");
 					System.out.println(e.toString());
 				}
-				
+				finally {
+					try { rs.close(); } catch (Exception e) { /* Ignored */ }
+					try { stmt.close(); } catch (Exception e) { /* Ignored */ }
+				    try { pstmt.close(); } catch (Exception e) { /* Ignored */ }
+				    try { conn.close(); } catch (Exception e) { /* Ignored */ }
+				    try { connection.close(); } catch (Exception e) { /* Ignored */ }
+				}
 				%>
 			
 		</body>

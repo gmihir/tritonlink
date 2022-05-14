@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Concetration Form</title>
+		<title>Concentration Form</title>
 		
 	    <style type="text/css">
    		<%@include file="../css/forms.css" %></style>
@@ -16,7 +16,7 @@
 		
 		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>
-		<h1>Concetrations</h1>
+		<h1>Concentrations</h1>
 		<table class="form-table"> 
 			<tr>
 				<th>Degree Name<sup>*</sup> </th>
@@ -78,7 +78,10 @@
 				<td><input type="submit" value="Delete"></td> 
 				</form>
 			</tr>
-			<% }%>
+			<% }
+				rs.close();
+				connection.close();
+			%>
 		
 			</table>
 		</div>

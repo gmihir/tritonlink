@@ -86,6 +86,8 @@
 			
 			ResultSet rs = stmt.executeQuery(SELECT_QUERY);
 			
+			
+			
 			while(rs.next()) {
 				
 			%>
@@ -120,7 +122,9 @@
 				<td><input type="submit" value="Delete"></td> 
 				</form>
 			</tr>
-			<% }%>
+			<% }
+				connection.close();
+			%>
 		
 			</table>
 		</div>
