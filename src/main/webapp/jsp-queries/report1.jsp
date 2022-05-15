@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>template_title</title>
+		<title>Report I</title>
 		
 	    <style type="text/css">
    		<%@include file="../css/queries.css" %></style>
@@ -14,23 +14,82 @@
 			<jsp:include page="../html/sidebar.html"/>
 		</div>
 		
-		<h1>template_title</h1>
+		<h1>Report I</h1>
 		
 		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>
 
 		<table class="form-table"> 
 			<tr>
-				<th>Concentration Name<sup>*</sup></th>
-				<th>Course ID<sup>*</sup></th>
+				<th>A. SID</th>
+				<th>B. Class Title, Course ID, QTR, Year</th>
+				<th>C. SID</th>
+				<th>D. SID</th>
+				<th>D. Degree</th>
+				<th>E. SID</th>
+				<th>E. Degree</th>
 			</tr>
 			
 		<tr>
 			<form action="concentration_courses_form.jsp" method="post">
 				<input type="hidden" value="insert" name="action">
 				
-					<td><input type="text" value="" name="con_name"></td>
-					<td><input type="text" value="" name="course_id"></td>
+					<td>
+						<select value="" name="end_qtr">
+							<option disabled selected value>-- select an option --</option>
+						    <option value="Fall">Fall</option>
+						  	<option value="Winter">Winter</option>
+						  	<option value="Spring">Spring</option>
+						</select>
+					</td>
+					<td>
+						<select value="" name="end_qtr">
+							<option disabled selected value>-- select an option --</option>
+						    <option value="Fall">Fall</option>
+						  	<option value="Winter">Winter</option>
+						  	<option value="Spring">Spring</option>
+						</select>
+					</td>
+					<td>
+						<select value="" name="end_qtr">
+							<option disabled selected value>-- select an option --</option>
+						    <option value="Fall">Fall</option>
+						  	<option value="Winter">Winter</option>
+						  	<option value="Spring">Spring</option>
+						</select>
+					</td>
+					<td>
+						<select value="" name="end_qtr">
+							<option disabled selected value>-- select an option --</option>
+						    <option value="Fall">Fall</option>
+						  	<option value="Winter">Winter</option>
+						  	<option value="Spring">Spring</option>
+						</select>
+					</td>
+					<td>
+						<select value="" name="end_qtr">
+							<option disabled selected value>-- select an option --</option>
+						    <option value="Fall">Fall</option>
+						  	<option value="Winter">Winter</option>
+						  	<option value="Spring">Spring</option>
+						</select>
+					</td>
+					<td>
+						<select value="" name="end_qtr">
+							<option disabled selected value>-- select an option --</option>
+						    <option value="Fall">Fall</option>
+						  	<option value="Winter">Winter</option>
+						  	<option value="Spring">Spring</option>
+						</select>
+					</td>
+					<td>
+						<select value="" name="end_qtr">
+							<option disabled selected value>-- select an option --</option>
+						    <option value="Fall">Fall</option>
+						  	<option value="Winter">Winter</option>
+						  	<option value="Spring">Spring</option>
+						</select>
+					</td>
 					
 				<td><input type="submit" value="Insert"></td>
   			</form>
