@@ -51,9 +51,9 @@
 					<td><input type="text" value="" name="class_title"></td>
 					<td>
 						<select value="" name="qtr">
-						    <option value="Fall">Fall</option>
-						  	<option value="Winter">Winter</option>
-						  	<option value="Spring">Spring</option>
+						    <option value="FALL">Fall</option>
+						  	<option value="WINTER">Winter</option>
+						  	<option value="SPRING">Spring</option>
 						</select>
 					</td>
 					<td><input type="number" value="" name="year"></td>
@@ -124,9 +124,7 @@
 				<td><input type="submit" value="Delete"></td> 
 				</form>
 			</tr>
-			<% }
-				connection.close();
-			%>
+			<% } %>
 		
 			</table>
 		</div>
@@ -134,6 +132,7 @@
 			<%@ page language="java" import="java.sql.*" %>
 			
 				<%
+					
 					try {
 						// Load Postgres Driver class file 
 						DriverManager.registerDriver(new org.postgresql.Driver());
@@ -312,6 +311,8 @@
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
 							response.sendRedirect("classes.jsp"); 
 						}
+					
+						connection.close();
 					}
 				catch(Exception e) {
 					System.out.println("error:");

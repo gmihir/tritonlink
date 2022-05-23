@@ -27,7 +27,7 @@
 			</tr>
 			
 		<tr>
-			<form action="club_entry_form.jsp" method="post">
+			<form action="club.jsp" method="post">
 				<input type="hidden" value="insert" name="action"> 
 					<td> <input type="text" value="" name="sid"></td> 
 					<td><input type="text" value="" name="name"></td> 
@@ -51,7 +51,7 @@
 			%>
 			
 			<tr>
-				<form action="club_entry_form.jsp" method="post">
+				<form action="club.jsp" method="post">
 				
 				<input type="hidden" value="update" name="action"> 
 					<td><input type="text" value="<%= rs.getString("sid") %>" name="sid"></td> 
@@ -61,7 +61,7 @@
 					
 				</form>
 				
-				<form action="club_entry_form.jsp" method="post">
+				<form action="club.jsp" method="post">
 					<input type="hidden" value="delete" name="action">
 					<input type="hidden" value="<%= rs.getString("sid") %>" name="sid">
 					<input type="hidden" value="<%= rs.getString("name") %>" name="name">
@@ -114,7 +114,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("club_entry_form.jsp"); 
+							response.sendRedirect("club.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
@@ -135,7 +135,7 @@
 							pstatement.close();
 							conn.close();
 							
-							response.sendRedirect("club_entry_form.jsp"); 
+							response.sendRedirect("club.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -156,7 +156,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("club_entry_form.jsp"); 
+							response.sendRedirect("club.jsp"); 
 						}
 					}
 				catch(Exception e) {

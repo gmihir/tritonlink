@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import ="java.util.ArrayList"%>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -30,110 +32,221 @@
 				<th>E. Degree</th>
 			</tr>
 			
-		<tr>
-			<form action="concentration_courses_form.jsp" method="post">
-				<input type="hidden" value="insert" name="action">
-				
-					<td>
-						<select value="" name="end_qtr">
-							<option disabled selected value>-- select an option --</option>
-						    <option value="Fall">Fall</option>
-						  	<option value="Winter">Winter</option>
-						  	<option value="Spring">Spring</option>
-						</select>
-					</td>
-					<td>
-						<select value="" name="end_qtr">
-							<option disabled selected value>-- select an option --</option>
-						    <option value="Fall">Fall</option>
-						  	<option value="Winter">Winter</option>
-						  	<option value="Spring">Spring</option>
-						</select>
-					</td>
-					<td>
-						<select value="" name="end_qtr">
-							<option disabled selected value>-- select an option --</option>
-						    <option value="Fall">Fall</option>
-						  	<option value="Winter">Winter</option>
-						  	<option value="Spring">Spring</option>
-						</select>
-					</td>
-					<td>
-						<select value="" name="end_qtr">
-							<option disabled selected value>-- select an option --</option>
-						    <option value="Fall">Fall</option>
-						  	<option value="Winter">Winter</option>
-						  	<option value="Spring">Spring</option>
-						</select>
-					</td>
-					<td>
-						<select value="" name="end_qtr">
-							<option disabled selected value>-- select an option --</option>
-						    <option value="Fall">Fall</option>
-						  	<option value="Winter">Winter</option>
-						  	<option value="Spring">Spring</option>
-						</select>
-					</td>
-					<td>
-						<select value="" name="end_qtr">
-							<option disabled selected value>-- select an option --</option>
-						    <option value="Fall">Fall</option>
-						  	<option value="Winter">Winter</option>
-						  	<option value="Spring">Spring</option>
-						</select>
-					</td>
-					<td>
-						<select value="" name="end_qtr">
-							<option disabled selected value>-- select an option --</option>
-						    <option value="Fall">Fall</option>
-						  	<option value="Winter">Winter</option>
-						  	<option value="Spring">Spring</option>
-						</select>
-					</td>
+			<tr>
+				<form method="post">
+					<input type="hidden" value="search" name="action">
 					
-				<td><input type="submit" value="Insert"></td>
-  			</form>
-		</tr>
+						<td>
+							<select value="" name="a-sid">
+								<option disabled selected>-- select an option --</option>
+							    
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			String SELECT_QUERY = "select * from concentration_courses";
+			String selectQuery = "select sid from student";
 			
 			Connection connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
 			
 			Statement stmt = connection.createStatement();
 			
-			ResultSet rs = stmt.executeQuery(SELECT_QUERY);
+			ResultSet rs = stmt.executeQuery(selectQuery);
 			
 			while(rs.next()) {
 				
-			%>
+		%>
 			
-			<tr>
-				<form action="concentration_courses_form.jsp" method="post">
-				<input type="hidden" value="update" name="action">
-				 
-					<td><input readonly type="text" value="<%= rs.getString("con_name") %>" name="con_name"></td>
-					<td><input readonly type="text" value="<%= rs.getString("course_id") %>" name="course_id"></td>
+								<option value="<%= rs.getString("sid") %>"><%= rs.getString("sid") %></option>
+			
+		<%	}
+			rs.close();
+			connection.close();
+		%>
+			
+							</select>
+						</td>
+						<td>
+							<select value="" name="b-class">
+								<option disabled selected>-- select an option --</option>
+								
+		<%
+			DriverManager.registerDriver(new org.postgresql.Driver());
+			selectQuery = "select * from class_courses";
+			
+			connection = DriverManager.getConnection
+					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+			
+			stmt = connection.createStatement();
+			
+			rs = stmt.executeQuery(selectQuery);
+			
+			while(rs.next()) {
 				
-<!-- 				<td><input type="submit" value="Update"></td> -->
-				</form>
-				<form action="concentration_courses_form.jsp" method="post">
-				<input type="hidden" value="delete" name="action">
+		%>
+			
+								<option value="<%= rs.getString("class_title")
+								+ "," + rs.getString("course_id")
+								+ "," + rs.getString("qtr")
+								+ "," + rs.getString("year")
+								%>"><%= rs.getString("class_title")
+								+ "," + rs.getString("course_id")
+								+ "," + rs.getString("qtr")
+								+ "," + rs.getString("year") %></option>
+			
+		<%	}
+			rs.close();
+			connection.close();
+		%>
+								
+							</select>
+						</td>
+						<td>
+							<select name="c-sid">
+								<option disabled selected>-- select an option --</option>
+								
+		<%
+			DriverManager.registerDriver(new org.postgresql.Driver());
+			selectQuery = "select * from student";
+			
+			connection = DriverManager.getConnection
+					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+			
+			stmt = connection.createStatement();
+			
+			rs = stmt.executeQuery(selectQuery);
+			
+			while(rs.next()) {
 				
-					<input type="hidden" value="<%= rs.getString("con_name") %>" name="con_name">
-					<input type="hidden" value="<%= rs.getString("course_id") %>" name="course_id">
-				
-				<td><input type="submit" value="Delete"></td> 
-				</form>
-			</tr>
-			<% }
-				rs.close();
-				connection.close();
-			%>
+		%>
+			
+								<option value="<%= rs.getString("sid") %>"><%= rs.getString("sid") %></option>
+			
+		<%	}
+			rs.close();
+			connection.close();
+		%>
 		
-			</table>
-		</div>
+							</select>
+						</td>
+						<td>
+							<select value="" name="d-sid">
+								<option disabled selected>-- select an option --</option>
+		
+		<%
+			DriverManager.registerDriver(new org.postgresql.Driver());
+			selectQuery = "select sid from student";
+			
+			connection = DriverManager.getConnection
+					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+			
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery(selectQuery);
+			
+			while(rs.next()) {
+				
+		%>
+			
+								<option value="<%= rs.getString("sid") %>"><%= rs.getString("sid") %></option>
+			
+		<%	}
+			rs.close();
+			connection.close();
+		%>
+		
+							</select>
+						</td>
+						<td>
+							<select value="" name="d-degree">
+								<option disabled selected>-- select an option --</option>
+		
+		<%
+			DriverManager.registerDriver(new org.postgresql.Driver());
+			selectQuery = "select deg_name from degree where deg_level = ?";
+			String whereClause = "BS";
+			
+			connection = DriverManager.getConnection
+					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+			
+			PreparedStatement pstmt = connection.prepareStatement(selectQuery);
+			pstmt.setString(1, whereClause);
+
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+		%>
+			
+								<option value="<%= rs.getString("deg_name") %>"><%= rs.getString("deg_name") %></option>
+			
+		<%	}
+			pstmt.close();
+			rs.close();
+			connection.close();
+		%>
+		
+							</select>
+						</td>
+						<td>
+							<select value="" name="e-sid">
+								<option disabled selected>-- select an option --</option>
+
+		<%
+			DriverManager.registerDriver(new org.postgresql.Driver());
+			selectQuery = "select sid from student";
+			
+			connection = DriverManager.getConnection
+					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+			
+			stmt = connection.createStatement();
+			rs = stmt.executeQuery(selectQuery);
+			
+			while(rs.next()) {
+				
+		%>
+			
+								<option value="<%= rs.getString("sid") %>"><%= rs.getString("sid") %></option>
+			
+		<%	}
+			rs.close();
+			connection.close();
+		%>
+
+							</select>
+						</td>
+						<td>
+							<select value="" name="e-degree">
+								<option disabled selected>-- select an option --</option>
+								
+		<%
+			DriverManager.registerDriver(new org.postgresql.Driver());
+			selectQuery = "select deg_name from degree where deg_level = ?";
+			whereClause = "MS";
+			
+			connection = DriverManager.getConnection
+					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+			
+			pstmt = connection.prepareStatement(selectQuery);
+			pstmt.setString(1, whereClause);
+
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+		%>
+			
+								<option value="<%= rs.getString("deg_name") %>"><%= rs.getString("deg_name") %></option>
+			
+		<%	}
+			pstmt.close();
+			rs.close();
+			connection.close();
+		%>
+								
+							</select>
+						</td>
+						
+					<td><input type="submit" value="Search"></td>
+	  			</form>
+			</tr>
 			
 			<%@ page language="java" import="java.sql.*" %>
 			
@@ -149,65 +262,60 @@
 						// Check if an insertion is requested
 						String action = request.getParameter("action"); 
 					%>
-					<% 
-						if (action != null && action.equals("insert")) {
-							conn.setAutoCommit(false);
-							// Create the prepared statement and use it to
-							// INSERT the student attrs INTO the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement( ("INSERT INTO concentration_courses VALUES (?, ?)"));
+					<%
+						if (action != null && action.equals("search")) {
+							List parameters = new ArrayList();
+							String reportPart = "";
 							
-							pstmt.setString(1, request.getParameter("con_name"));
-							pstmt.setString(2, request.getParameter("course_id"));
+							// define usert input parameters
+							String aSid = request.getParameter("a-sid");
+							String bClass = request.getParameter("b-class");
+							String cSid = request.getParameter("c-sid");
+							String dSid = request.getParameter("d-sid");
+							String dDegree = request.getParameter("d-degree");
+							String eSid = request.getParameter("e-sid");
+							String eDegree = request.getParameter("e-degree");
+							
+							// go through all possible cases and route page based on user input
+							if(aSid != null){
+								parameters.add(aSid);
+								reportPart = "a";
 
-							pstmt.executeUpdate();
-							conn.commit();
-							conn.setAutoCommit(true);
+								%>
+								
+								<jsp:include page="report1_partA.jsp">
+								    <jsp:param name="sid" value="<%= aSid %>"/>
+								</jsp:include>
+								
+								<%
+							}
+							
+							else if(bClass != null){
+								parameters.add(bClass);
+								reportPart = "b";
 
-							pstmt.close();
-							conn.close();
+							}
+							
+							else if(cSid != null){
+								parameters.add(cSid);
+								reportPart = "c";
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("concentration_courses_form.jsp"); 
-						}
-/* 						else if (action != null && action.equals("update")) {
-							System.out.println("in update");
-							conn.setAutoCommit(false);
-							// Create the prepared statement and use it to
-							// UPDATE the student attributes in the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement("UPDATE concentration_courses SET min_courses = ?, con_gpa = ? WHERE deg_name = ? AND deg_level = ? AND con_name = ?");
+							}
 							
-							pstmt.setString(1, request.getParameter("con_name"));
-							pstmt.setString(2, request.getParameter("course_id"));
-							
-							System.out.println(pstmt.toString());
-							
-							pstmt.executeUpdate();
-							conn.commit();
-							conn.setAutoCommit(true);
-							
-							pstmt.close();
-							conn.close();
-							
-							response.sendRedirect("concentration_courses_form.jsp"); 
-						} */
-						else if (action != null && action.equals("delete")) {
-							conn.setAutoCommit(false);
-							// Create the prepared statement and use it to 
-							// DELETE the student FROM the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement("DELETE FROM concentration_courses WHERE con_name = ? AND course_id = ?");
-							
-							pstmt.setString(1, request.getParameter("con_name"));
-							pstmt.setString(2, request.getParameter("course_id"));
+							else if(dSid != null && dDegree != null){
+								parameters.add(dSid);
+								parameters.add(dDegree);
+								reportPart = "d";
 
-							pstmt.executeUpdate();
-							conn.commit();
-							conn.setAutoCommit(true);
+							}
+							
+							else if(eSid != null && eDegree != null){
+								parameters.add(eSid);
+								parameters.add(eDegree);
+								reportPart = "e";
 
-							pstmt.close();
-							conn.close();
-
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("concentration_courses_form.jsp"); 
+							}
+							
 						}
 					}
 				catch(Exception e) {
@@ -216,7 +324,9 @@
 				}
 				
 				%>
-			
+				
+				</table>
+			</div>
 		</body>
 	</head>
 </html>

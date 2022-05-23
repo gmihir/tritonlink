@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+html {
+	color: red;
+}
+
+li {
+	font-size: 12px;
+}
+
+.results-table {
+	margin-top: 50px;
+	margin-left: auto;
+	margin-right: auto;
+	height: auto;
+}

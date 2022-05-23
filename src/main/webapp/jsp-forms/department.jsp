@@ -25,7 +25,7 @@
 			</tr>
 			
 		<tr>
-			<form action="department_entry.jsp" method="post">
+			<form action="department.jsp" method="post">
 				<input type="hidden" value="insert" name="action"> 
 					<td> <input type="text" value="" name="dep_name"></td> 
 					<td><input type="submit" value="Insert"></td>
@@ -49,7 +49,7 @@
 			%>
 			
 			<tr>
-				<form action="department_entry.jsp" method="post">
+				<form action="department.jsp" method="post">
 				
 				<input type="hidden" value="update" name="action"> 
 					<td><input type="text" value="<%= rs.getString("dep_name") %>" name="dep_name"></td> 
@@ -57,7 +57,7 @@
 					
 				</form>
 
-				<form action="department_entry.jsp" method="post">
+				<form action="department.jsp" method="post">
 					<input type="hidden" value="delete" name="action">
 					<input type="hidden" value="<%= rs.getString("dep_name") %>" name="dep_name">
 					<td><input type="submit" value="Delete"></td> 
@@ -100,7 +100,7 @@
 							conn.setAutoCommit(true);
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("department_entry.jsp"); 
+							response.sendRedirect("department.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
 							conn.setAutoCommit(false);
@@ -135,7 +135,7 @@
 							conn.setAutoCommit(true);
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("department_entry.jsp"); 
+							response.sendRedirect("department.jsp"); 
 						}
 					}
 				catch(Exception e) {

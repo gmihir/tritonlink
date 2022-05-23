@@ -29,7 +29,7 @@
 			</tr>
 			
 		<tr>
-			<form action="concentration_form.jsp" method="post">
+			<form action="concentration.jsp" method="post">
 				<input type="hidden" value="insert" name="action">
 				
 					<td><input type="text" value="" name="deg_name"></td> 
@@ -57,7 +57,7 @@
 			%>
 			
 			<tr>
-				<form action="concentration_form.jsp" method="post">
+				<form action="concentration.jsp" method="post">
 				<input type="hidden" value="update" name="action">
 				
 					<td><input readonly type="text" value="<%= rs.getString("deg_name") %>" name="deg_name"></td> 
@@ -68,7 +68,7 @@
 				
 				<td><input type="submit" value="Update"></td>
 				</form>
-				<form action="concentration_form.jsp" method="post">
+				<form action="concentration.jsp" method="post">
 				<input type="hidden" value="delete" name="action">
 				
 					<input type="hidden" value="<%= rs.getString("deg_name") %>" name="deg_name">
@@ -123,7 +123,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("concentration_form.jsp"); 
+							response.sendRedirect("concentration.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
@@ -147,7 +147,7 @@
 							pstmt.close();
 							conn.close();
 							
-							response.sendRedirect("concentration_form.jsp"); 
+							response.sendRedirect("concentration.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -167,7 +167,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("concentration_form.jsp"); 
+							response.sendRedirect("concentration.jsp"); 
 						}
 					}
 				catch(Exception e) {

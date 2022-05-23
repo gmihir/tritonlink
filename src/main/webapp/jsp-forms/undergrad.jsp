@@ -35,7 +35,7 @@
 			</tr>
 			
 		<tr>
-			<form action="undergrad_entry.jsp" method="post">
+			<form action="undergrad.jsp" method="post">
 				<input type="hidden" value="insert" name="action"> 
 					<td><input type="number" value="" name="ssn"></td>  				
 					<td> <input type="text" value="" name="sid"></td> 
@@ -65,7 +65,7 @@
 			%>
 			
 			<tr>
-				<form action="undergrad_entry.jsp" method="post">
+				<form action="undergrad.jsp" method="post">
 				
 				<input type="hidden" value="update" name="action"> 
 					<td><input readonly type="text" value="<%= rs.getString("ssn") %>" name="ssn"></td> 
@@ -83,7 +83,7 @@
 					
 				</form>
 
-				<form action="undergrad_entry.jsp" method="post">
+				<form action="undergrad.jsp" method="post">
 					<input type="hidden" value="delete" name="action">
 					<input type="hidden" value="<%= rs.getString("ssn") %>" name="ssn">
 					<input type="hidden" value="<%= rs.getString("sid") %>" name="sid">
@@ -155,7 +155,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("undergrad_entry.jsp"); 
+							response.sendRedirect("undergrad.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
 							conn.setAutoCommit(false);
@@ -189,7 +189,7 @@
 							pstatement.close();
 							conn.close();
 							
-							response.sendRedirect("undergrad_entry.jsp"); 
+							response.sendRedirect("undergrad.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -207,7 +207,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("undergrad_entry.jsp"); 
+							response.sendRedirect("undergrad.jsp"); 
 						}
 					}
 				catch(Exception e) {
