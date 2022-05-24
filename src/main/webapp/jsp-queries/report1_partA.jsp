@@ -45,6 +45,7 @@
 		%>
 				<tr>
 					
+					<tr><div id="table-title">Student</div></tr>
 					<td><input readonly type="text" value="<%= rs.getString("ssn") %>" name="ssn"></td> 
 					<td><input readonly type="text" value="<%= rs.getString("first_name") %>" name="first_name"></td>
 					<td><input readonly type="text" value="<%= rs.getString("middle_name") %>" name="middle_name"></td>
@@ -73,10 +74,9 @@
 			pstmt.setString(2, "SPRING");
 			pstmt.setInt(3, 2018);
 			
-			System.out.println(pstmt);
-			
 			// Execute query and show results
 			rs = pstmt.executeQuery();
+			rs.next();
 			
 			// Define section enrollment variables
 			String qtr = rs.getString("qtr");
@@ -90,6 +90,7 @@
 			pstmt.close();
 			rs.close();
 			connection.close();
+			
 			
 			// Postgres setup
 			DriverManager.registerDriver(new org.postgresql.Driver());
@@ -105,6 +106,7 @@
 			
 			// Execute query and show results
 			rs = pstmt.executeQuery();
+			rs.next();
 			
 			// Define class variables
 			String gradeOption = rs.getString("grade_option");
@@ -123,13 +125,14 @@
 					
 					<tr>
 						
-						<td><input readonly type="text" value="<%= rs.getString("class_title") %>" name="class_title"></td> 
-						<td><input readonly type="text" value="<%= rs.getString("qtr") %>" name="qtr"></td>
-						<td><input readonly type="text" value="<%= rs.getString("year") %>" name="year"></td>
-						<td><input readonly type="text" value="<%= rs.getString("section_id") %>" name="section_id"></td>
-						<td><input readonly type="text" value="<%= rs.getString("units") %>" name="units"></td> 
-						<td><input readonly type="text" value="<%= rs.getString("grade") %>" name="grade"></td>
-						<td><input readonly type="text" value="<%= rs.getString("grade_option") %>" name="grade_option"></td>
+						<tr><div id="table-title">Class</div></tr>
+						<td><input readonly type="text" value="<%= classTitle %>" name="class_title"></td> 
+						<td><input readonly type="text" value="<%= qtr %>" name="qtr"></td>
+						<td><input readonly type="text" value="<%= year %>" name="year"></td>
+						<td><input readonly type="text" value="<%= sectionId %>" name="section_id"></td>
+						<td><input readonly type="text" value="<%= units %>" name="units"></td> 
+						<td><input readonly type="text" value="<%= grade %>" name="grade"></td>
+						<td><input readonly type="text" value="<%= gradeOption %>" name="grade_option"></td>
 						
 					</tr>
 				</table>
