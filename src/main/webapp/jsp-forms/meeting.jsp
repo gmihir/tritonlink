@@ -32,7 +32,7 @@
 			</tr>
 			
 		<tr>
-			<form action="meeting_form.jsp" method="post">
+			<form action="meeting.jsp" method="post">
 				<input type="hidden" value="insert" name="action"> 
 					<td><input type="text" value="" name="class_title"></td> 
 					<td>
@@ -72,7 +72,7 @@
 			%>
 			
 			<tr>
-				<form action="meeting_form.jsp" method="post">
+				<form action="meeting.jsp" method="post">
 				<input type="hidden" value="update" name="action">
 				
 					<td><input readonly type="text" value="<%= rs.getString("class_title") %>" name="class_title"></td> 
@@ -86,7 +86,7 @@
 				
 				<td><input type="submit" value="Update"></td>
 				</form>
-				<form action="meeting_form.jsp" method="post">
+				<form action="meeting.jsp" method="post">
 				<input type="hidden" value="delete" name="action">
 				
 					<input type="hidden" value="<%= rs.getString("class_title") %>" name="class_title">
@@ -152,7 +152,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("meeting_form.jsp"); 
+							response.sendRedirect("meeting.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
@@ -180,7 +180,7 @@
 							pstmt.close();
 							conn.close();
 							
-							response.sendRedirect("meeting_form.jsp"); 
+							response.sendRedirect("meeting.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -204,7 +204,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("meeting_form.jsp"); 
+							response.sendRedirect("meeting.jsp"); 
 						}
 					}
 				catch(Exception e) {

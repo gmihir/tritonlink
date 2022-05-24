@@ -26,7 +26,7 @@
 			</tr>
 			
 		<tr>
-			<form action="concentration_courses_form.jsp" method="post">
+			<form action="concentration_courses.jsp" method="post">
 				<input type="hidden" value="insert" name="action">
 				
 					<td><input type="text" value="" name="con_name"></td>
@@ -51,7 +51,7 @@
 			%>
 			
 			<tr>
-				<form action="concentration_courses_form.jsp" method="post">
+				<form action="concentration_courses.jsp" method="post">
 				<input type="hidden" value="update" name="action">
 				 
 					<td><input readonly type="text" value="<%= rs.getString("con_name") %>" name="con_name"></td>
@@ -59,7 +59,7 @@
 				
 <!-- 				<td><input type="submit" value="Update"></td> -->
 				</form>
-				<form action="concentration_courses_form.jsp" method="post">
+				<form action="concentration_courses.jsp" method="post">
 				<input type="hidden" value="delete" name="action">
 				
 					<input type="hidden" value="<%= rs.getString("con_name") %>" name="con_name">
@@ -108,7 +108,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("concentration_courses_form.jsp"); 
+							response.sendRedirect("concentration_courses.jsp"); 
 						}
 /* 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
@@ -148,7 +148,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("concentration_courses_form.jsp"); 
+							response.sendRedirect("concentration_courses.jsp"); 
 						}
 					}
 				catch(Exception e) {

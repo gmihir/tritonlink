@@ -27,7 +27,7 @@
 			</tr>
 			
 		<tr>
-			<form action="prereq_entry.jsp" method="post">
+			<form action="prereq.jsp" method="post">
 				<input type="hidden" value="insert" name="action"> 
 					<td> <input type="text" value="" name="course_id"></td> 
 					<td><input type="text" value="" name="pre_course_id"></td> 
@@ -68,7 +68,7 @@
 			%>
 			
 			<tr>
-				<form action="prereq_entry.jsp" method="post">
+				<form action="prereq.jsp" method="post">
 				
 				<input type="hidden" value="update" name="action"> 
 					<td><input readonly type="text" value="<%= rs.getString("course_id") %>" name="course_id"></td> 
@@ -78,7 +78,7 @@
 					
 				</form>
 
-				<form action="prereq_entry.jsp" method="post">
+				<form action="prereq.jsp" method="post">
 					<input type="hidden" value="delete" name="action">
 					<input type="hidden" value="<%= rs.getString("course_id") %>" name="course_id">
 					<input type="hidden" value="<%= preCourseId %>" name="pre_course_id">
@@ -141,7 +141,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("prereq_entry.jsp"); 
+							response.sendRedirect("prereq.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
 							conn.setAutoCommit(false);
@@ -184,7 +184,7 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("prereq_entry.jsp"); 
+							response.sendRedirect("prereq.jsp"); 
 						}
 					}
 				catch(Exception e) {
