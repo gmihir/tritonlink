@@ -24,7 +24,7 @@
 		<table class="form-table"> 
 			<tr>
 				<th>A. SID</th>
-				<th>B. Class Title, Course ID, QTR, Year</th>
+				<th>B. Class Title</th>
 				<th>C. SID</th>
 				<th>D. SID</th>
 				<th>D. Degree</th>
@@ -70,7 +70,7 @@
 								
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			selectQuery = "select * from class_courses";
+			selectQuery = "select class_title from class GROUP BY class_title";
 			
 			connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
@@ -83,14 +83,7 @@
 				
 		%>
 			
-								<option value="<%= rs.getString("class_title")
-								+ "," + rs.getString("course_id")
-								+ "," + rs.getString("qtr")
-								+ "," + rs.getString("year")
-								%>"><%= rs.getString("class_title")
-								+ "," + rs.getString("course_id")
-								+ "," + rs.getString("qtr")
-								+ "," + rs.getString("year") %></option>
+								<option value="<%= rs.getString("class_title") %>"><%= rs.getString("class_title") %></option>
 			
 		<%	}
 			rs.close();
@@ -264,8 +257,6 @@
 					%>
 					<%
 						if (action != null && action.equals("search")) {
-							List parameters = new ArrayList();
-							String reportPart = "";
 							
 							// define usert input parameters
 							String aSid = request.getParameter("a-sid");
@@ -278,9 +269,6 @@
 							
 							// go through all possible cases and route page based on user input
 							if(aSid != null){
-								parameters.add(aSid);
-								reportPart = "a";
-
 								%>
 								
 								<jsp:include page="report1_partA.jsp">
@@ -291,28 +279,24 @@
 							}
 							
 							else if(bClass != null){
-								parameters.add(bClass);
-								reportPart = "b";
-
+								%>
+								
+								<jsp:include page="report1_partB.jsp">
+								    <jsp:param name="class_title" value="<%= bClass %>"/>
+								</jsp:include>
+								
+								<%
 							}
 							
 							else if(cSid != null){
-								parameters.add(cSid);
-								reportPart = "c";
 
 							}
 							
 							else if(dSid != null && dDegree != null){
-								parameters.add(dSid);
-								parameters.add(dDegree);
-								reportPart = "d";
 
 							}
 							
 							else if(eSid != null && eDegree != null){
-								parameters.add(eSid);
-								parameters.add(eDegree);
-								reportPart = "e";
 
 							}
 							
