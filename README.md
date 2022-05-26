@@ -1,5 +1,12 @@
 # TritonLink
 
+## Useful Commands
+psql postgres -U username
+DROP DATABASE TRITONLINKDB;
+CREATE DATABASE TRITONLINKDB;
+\c tritonlinkdb
+\i file-path
+
 ## How to build project
 
 First, you will need to install Eclipse and create a new dynamic web project. Then, get the files we have created and import them into your project. Next, you should install PostgreSQL locally, as well as Apache Tomcat v.9.0. Then, just navigate to home.jsp click run in Eclipse!
