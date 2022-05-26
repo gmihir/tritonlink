@@ -13,18 +13,22 @@
 		<table class="results-table">
 			<tr>
 				<th>Course</th>
+				<th>Class Title</th>
 				<th>Qtr</th>
 				<th>Year</th>
 				<th>Min Units</th>
 				<th>Max Units</th>
 				<th>Grade Option</th>
 			</tr>
+			<tr>
+						
+						<tr><div id="table-title">Class</div></tr>
 		<%
-		String class_title = request.getParameter("class_title");
+		String classTitle = request.getParameter("class_title");
 		Map map = new HashMap();
 		
 		// Parse all the parameters
-		if(class_title != null){
+		if(classTitle != null){
 			
 			// Postgres setup
 			DriverManager.registerDriver(new org.postgresql.Driver());
@@ -32,105 +36,99 @@
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
 			
 			// Query setup
-			String query = "SELECT qtr, year, grade_option FROM class WHERE class_title = ?";
+			String query = "SELECT qtr, year, grade_option FROM class WHERE class_title = ?;";
 			PreparedStatement pstmt = connection.prepareStatement(query);
-			pstmt.setString(1, class_title);
+			pstmt.setString(1, classTitle);
 			
 			// Execute query and show results
 			ResultSet rs = pstmt.executeQuery();
 			
 			// Loop through and create a key value mapping for all possible classes
+			int index = 0;
 			while(rs.next()) {
-				String key = classTitle + "," + rs.getString("qtr") + "," +  rs.getString("year");
-				String[] temp = new String[4];
-				temp[0] = rs.getString("grade_option");
 				
-				map.put(key, temp);
+				String qtr = rs.getString("qtr");
+				int year = rs.getInt("year");
+				String gradeOption = rs.getString("grade_option");
 				
+				query = "SELECT course_id FROM class_courses WHERE class_title = ? AND qtr = ? AND year = ?";
+				pstmt = connection.prepareStatement(query);
+				
+				pstmt.setString(1, classTitle);
+				pstmt.setString(2, qtr);
+				pstmt.setInt(3, year);
+				
+				// Execute query and show results
+				ResultSet tempRs = pstmt.executeQuery();
+				tempRs.next();
+				
+				String courseId = tempRs.getString("course_id");
+				
+				query = "SELECT min_units, max_units FROM courses WHERE course_id = ?";
+				pstmt = connection.prepareStatement(query);
+				
+				pstmt.setString(1, courseId);
+				
+				// Execute query and show results
+				tempRs = pstmt.executeQuery();
+				tempRs.next();
+				
+				String minUnits = tempRs.getString("min_units");
+				String maxUnits = tempRs.getString("max_units");
+				
+				%>
+						<td><input readonly type="text" value="<%= courseId %>" name="course_id"></td>
+						<td><input readonly type="text" value="<%= classTitle %>" name="class_title"></td>
+						<td><input readonly type="text" value="<%= qtr %>" name="qtr"></td>
+						<td><input readonly type="text" value="<%= year %>" name="year"></td>
+						<td><input readonly type="text" value="<%= minUnits %>" name="min_units"></td>
+						<td><input readonly type="text" value="<%= maxUnits %>" name="max_units"></td> 
+						<td><input readonly type="text" value="<%= gradeOption %>" name="grade_option"></td>
+						
+					</tr>
+				<%
+				
+				tempRs.close();
+				// JUST LOOP THROUGH AND DO ALL THE QUERIES FOR EACH CLASS ONE BY ONE THEN ADD TO THE HTML IN THE LOOP
+			}
+			
+			query = "SELECT sid FROM section_enrollment WHERE class_title = ? AND qtr = ? AND year = ?";
+			pstmt = connection.prepareStatement(query);
+			
+			pstmt.setString(1, classTitle);
+			pstmt.setString(2, "SPRING");
+			pstmt.setInt(3, classTitle);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				query = "SELECT * FROM student WHERE sid = ?";
+				pstmt = connection.prepareStatement(query);
+				
+				pstmt.setString(1, rs.getString('sid'));
+				
+				// Execute query and show results
+				ResultSet tempRs = pstmt.executeQuery();
+				tempRs.next();
+				
+				%>
+						<td><input readonly type="text" value="<%= tempRs.getString("ssn") %>" name="ssn"></td>
+						<td><input readonly type="text" value="<%= tempRs.getString("sid") %>" name="sid"></td>
+						<td><input readonly type="text" value="<%= tempRs.getString("first_name") %>" name="first_name"></td>
+						<td><input readonly type="text" value="<%= tempRs.getString("middle_name") %>" name="middle_name"></td>
+						<td><input readonly type="text" value="<%= tempRs.getString("last_name") %>" name="last_name"></td>
+						<td><input readonly type="text" value="<%= tempRs.getString("resident_status") %>" name="resident_status"></td> 
+						<td><input readonly type="text" value="<%= tempRs.getString("enrollment_status") %>" name="enrollment_status"></td>
+						
+					</tr>
+				<%
+				
+				tempRs.close();
 				// JUST LOOP THROUGH AND DO ALL THE QUERIES FOR EACH CLASS ONE BY ONE THEN ADD TO THE HTML IN THE LOOP
 			}
 			
 			// Close everything
-			pstmt.close();
-			rs.close();
-			connection.close();
-			
-			// Postgres setup
-			DriverManager.registerDriver(new org.postgresql.Driver());
-			connection = DriverManager.getConnection
-					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
-			
-			// Query setup
-			query = "SELECT course_id FROM courses WHERE ";
-			pstmt = connection.prepareStatement(query);
-			pstmt.setString(1, sid);
-			pstmt.setString(2, "SPRING");
-			pstmt.setInt(3, 2018);
-			
-			// Execute query and show results
-			rs = pstmt.executeQuery();
-			rs.next();
-			
-			// Define section enrollment variables
-			String qtr = rs.getString("qtr");
-			String year = rs.getString("year");
-			String sectionId = rs.getString("section_id");
-			String units = rs.getString("units");
-			String grade = rs.getString("grade");
-			String classTitle = rs.getString("class_title");
-			
-			// Close everything
-			pstmt.close();
-			rs.close();
-			connection.close();
-			
-			
-			// Postgres setup
-			DriverManager.registerDriver(new org.postgresql.Driver());
-			connection = DriverManager.getConnection
-					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
-			
-			// Query setup
-			query = "SELECT grade_option FROM class WHERE class_title = ? AND qtr = ? AND year = ?";
-			pstmt = connection.prepareStatement(query);
-			pstmt.setString(1, classTitle);
-			pstmt.setString(2, "SPRING");
-			pstmt.setInt(3, 2018);
-			
-			// Execute query and show results
-			rs = pstmt.executeQuery();
-			rs.next();
-			
-			// Define class variables
-			String gradeOption = rs.getString("grade_option");
-			
-			%>
-				<table class="results-table">
-					<tr>
-						<th>Class Title</th>
-						<th>Qtr</th>
-						<th>Year</th>
-						<th>Section ID</th>
-						<th>Units</th>
-						<th>Grade</th>
-						<th>Grade Option</th>
-					</tr>
-					
-					<tr>
-						
-						<tr><div id="table-title">Class</div></tr>
-						<td><input readonly type="text" value="<%= classTitle %>" name="class_title"></td> 
-						<td><input readonly type="text" value="<%= qtr %>" name="qtr"></td>
-						<td><input readonly type="text" value="<%= year %>" name="year"></td>
-						<td><input readonly type="text" value="<%= sectionId %>" name="section_id"></td>
-						<td><input readonly type="text" value="<%= units %>" name="units"></td> 
-						<td><input readonly type="text" value="<%= grade %>" name="grade"></td>
-						<td><input readonly type="text" value="<%= gradeOption %>" name="grade_option"></td>
-						
-					</tr>
-				</table>
-			<%
-			
 			pstmt.close();
 			rs.close();
 			connection.close();
