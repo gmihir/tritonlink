@@ -65,9 +65,7 @@
 					<th>Grade Option</th>
 				</tr>
 				
-				<tr><div id="table-title">Class</div></tr>
-				<tr>
-							
+				<tr><div id="table-title">Class</div></tr>							
 		<%
 		
 			}
@@ -122,14 +120,15 @@
 				String gradeOption = tempRs.getString("grade_option");
 				
 				%>
-							<td><input readonly type="text" value="<%= classTitle %>" name="class_title"></td> 
-							<td><input readonly type="text" value="<%= qtr %>" name="qtr"></td>
-							<td><input readonly type="text" value="<%= year %>" name="year"></td>
-							<td><input readonly type="text" value="<%= sectionId %>" name="section_id"></td>
-							<td><input readonly type="text" value="<%= units %>" name="units"></td> 
-							<td><input readonly type="text" value="<%= grade %>" name="grade"></td>
-							<td><input readonly type="text" value="<%= gradeOption %>" name="grade_option"></td>
-						</tr>
+					<tr>
+						<td><input readonly type="text" value="<%= classTitle %>" name="class_title"></td> 
+						<td><input readonly type="text" value="<%= qtr %>" name="qtr"></td>
+						<td><input readonly type="text" value="<%= year %>" name="year"></td>
+						<td><input readonly type="text" value="<%= sectionId %>" name="section_id"></td>
+						<td><input readonly type="text" value="<%= units %>" name="units"></td> 
+						<td><input readonly type="text" value="<%= grade %>" name="grade"></td>
+						<td><input readonly type="text" value="<%= gradeOption %>" name="grade_option"></td>
+					</tr>
 				<%
 				
 				tempRs.close();
