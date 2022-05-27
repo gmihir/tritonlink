@@ -20,10 +20,9 @@
 				<th>Max Units</th>
 				<th>Grade Option</th>
 			</tr>		
-			<tr><div id="table-title">Class</div></tr>
+			<tr><div id="table-title">Classes</div></tr>
 		<%
 		String classTitle = request.getParameter("class_title");
-		Map map = new HashMap();
 		
 		// Parse all the parameters
 		if(classTitle != null){
@@ -104,7 +103,7 @@
 						<th>Enrollment Status</th>
 					</tr>
 						
-					<tr><div id="table-title">Class</div></tr>
+					<tr><div id="table-title">Currently Enrolled Students</div></tr>
 			<%
 			
 			query = "SELECT sid FROM section_enrollment WHERE class_title = ? AND qtr = ? AND year = ?";
