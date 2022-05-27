@@ -19,13 +19,10 @@
 				<th>Min Units</th>
 				<th>Max Units</th>
 				<th>Grade Option</th>
-			</tr>
-			<tr>
-						
-						<tr><div id="table-title">Class</div></tr>
+			</tr>		
+			<tr><div id="table-title">Classes</div></tr>
 		<%
 		String classTitle = request.getParameter("class_title");
-		Map map = new HashMap();
 		
 		// Parse all the parameters
 		if(classTitle != null){
@@ -77,6 +74,7 @@
 				String maxUnits = tempRs.getString("max_units");
 				
 				%>
+					<tr>
 						<td><input readonly type="text" value="<%= courseId %>" name="course_id"></td>
 						<td><input readonly type="text" value="<%= classTitle %>" name="class_title"></td>
 						<td><input readonly type="text" value="<%= qtr %>" name="qtr"></td>
@@ -92,12 +90,28 @@
 				// JUST LOOP THROUGH AND DO ALL THE QUERIES FOR EACH CLASS ONE BY ONE THEN ADD TO THE HTML IN THE LOOP
 			}
 			
+			%>
+				</table>
+				<table class="results-table">
+					<tr>
+						<th>SSN</th>
+						<th>SID</th>
+						<th>First Name</th>
+						<th>Middle Name</th>
+						<th>Last Name</th>
+						<th>Resident Status</th>
+						<th>Enrollment Status</th>
+					</tr>
+						
+					<tr><div id="table-title">Currently Enrolled Students</div></tr>
+			<%
+			
 			query = "SELECT sid FROM section_enrollment WHERE class_title = ? AND qtr = ? AND year = ?";
 			pstmt = connection.prepareStatement(query);
 			
 			pstmt.setString(1, classTitle);
 			pstmt.setString(2, "SPRING");
-			pstmt.setInt(3, classTitle);
+			pstmt.setInt(3, 2018);
 			
 			rs = pstmt.executeQuery();
 			
@@ -106,13 +120,14 @@
 				query = "SELECT * FROM student WHERE sid = ?";
 				pstmt = connection.prepareStatement(query);
 				
-				pstmt.setString(1, rs.getString('sid'));
+				pstmt.setString(1, rs.getString("sid"));
 				
 				// Execute query and show results
 				ResultSet tempRs = pstmt.executeQuery();
 				tempRs.next();
 				
 				%>
+					<tr>
 						<td><input readonly type="text" value="<%= tempRs.getString("ssn") %>" name="ssn"></td>
 						<td><input readonly type="text" value="<%= tempRs.getString("sid") %>" name="sid"></td>
 						<td><input readonly type="text" value="<%= tempRs.getString("first_name") %>" name="first_name"></td>
