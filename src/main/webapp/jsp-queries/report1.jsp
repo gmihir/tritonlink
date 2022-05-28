@@ -126,7 +126,7 @@
 		
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			selectQuery = "select sid from student";
+			selectQuery = "select sid from student where sid not in (select sid from grad)";
 			
 			connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
@@ -184,7 +184,7 @@
 
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			selectQuery = "select sid from student";
+			selectQuery = "select sid from grad";
 			
 			connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
