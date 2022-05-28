@@ -65,9 +65,11 @@
 			DriverManager.registerDriver(new org.postgresql.Driver());
 			connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+
+			
 			
 			// Query setup
-			query = "SELECT s.sid,s.class_title,s.qtr,s.year,s.section_id,s.units,g.grade FROM section_enrollment s, student_classes g WHERE s.sid = ? AND s.sid = g.sid AND s.class_title = g.class_title AND s.qtr = g.qtr AND s.year = g.year AND s.section_id = g.section_id ORDER BY s.qtr,s.year";
+			query = "SELECT sid,class_title,qtr,year,section_id,units,grade FROM student_classes WHERE sid = ? ORDER BY qtr,year";
 			pstmt = connection.prepareStatement(query);
 			pstmt.setString(1, sid);
 			
@@ -126,7 +128,6 @@
 			// Close everything
 			pstmt.close();
 			rs.close();
-			connection.close();
 			
 			// need to calculate gpa for every quarter and cumulative gpa
 			double cGpa = 0;
@@ -179,6 +180,7 @@
 			}
 			
 			cGpa = credits/totalNumUnits;
+			cGpa = ((double)((int)(cGpa *100.0)))/100.0;
 						
 			%>
 			<tr>
@@ -193,10 +195,61 @@
 			</table>
 			<% 
 			
+			String currentQuarterQuery = "SELECT sid,class_title,qtr,year,section_id,units,grade FROM section_enrollment WHERE sid = ?";
+			PreparedStatement prepstate = connection.prepareStatement(currentQuarterQuery);
+			prepstate.setString(1,sid);
+			rs = prepstate.executeQuery();
+			
+			%>
+				<tr><div id="table-title">CURRENTLY ENROLLED</div></tr>
+			<% 
+			
+			while(rs.next()) {
+				String qtr = rs.getString("qtr");
+				String year = rs.getString("year");
+
+				String sectionId = rs.getString("section_id");
+				String units = rs.getString("units");
+				String classTitle = rs.getString("class_title");
+				String querySid = rs.getString("sid");
+				
+				%>
+				<table class="results-table"> 
+					<tr>
+						<th>Class Title</th>
+						<th>Qtr</th>
+						<th>Year</th>
+						<th>Section ID</th>
+						<th>Units</th>
+					</tr>
+					
+					<tr>
+						
+						<td><input readonly type="text" value="<%= classTitle %>" name="class_title"></td> 
+						<td><input readonly type="text" value="<%= qtr %>" name="qtr"></td>
+						<td><input readonly type="text" value="<%= year %>" name="year"></td>
+						<td><input readonly type="text" value="<%= sectionId %>" name="section_id"></td>
+						<td><input readonly type="text" value="<%= units %>" name="units"></td> 						
+					</tr>
+				</table>
+				<% 
+				
+				
+			}
+			
+			rs.close();
+			prepstate.close();
+			connection.close();
+			
 			
 			for(Map.Entry<String, ArrayList<ArrayList<String>>> entry : map.entrySet()) {
 				String qtrString = entry.getKey();
 				ArrayList<ArrayList<String>> entries = entry.getValue();
+				double quarterGPADisplay = ((double)((int)(gpa.get(qtrString) *100.0)))/100.0;
+				
+				%>
+					<tr><div id="table-title"><%= qtrString %>, GPA: <%= quarterGPADisplay %></div></tr>
+				<% 
 				
 				for(int i = 0; i < entries.size(); i++) {
 					ArrayList<String> curr = entries.get(i);
@@ -222,7 +275,6 @@
 					
 					<tr>
 						
-						<tr><div id="table-title"><%= qtrString %>, GPA: <%= gpa.get(qtrString) %></div></tr>
 						<td><input readonly type="text" value="<%= displayTitle %>" name="class_title"></td> 
 						<td><input readonly type="text" value="<%= displayQtr %>" name="qtr"></td>
 						<td><input readonly type="text" value="<%= displayYr %>" name="year"></td>
