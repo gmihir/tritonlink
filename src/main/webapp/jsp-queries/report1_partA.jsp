@@ -53,6 +53,19 @@
 					
 				</tr>
 			</table>
+			
+			<table class="results-table">
+				<tr>
+					<th>Class Title</th>
+					<th>Qtr</th>
+					<th>Year</th>
+					<th>Section ID</th>
+					<th>Units</th>
+					<th>Grade Choice</th>
+					<th>Grade Option</th>
+				</tr>
+				
+				<tr><div id="table-title">Class</div></tr>							
 		<%
 		
 			}
@@ -76,56 +89,38 @@
 			
 			// Execute query and show results
 			rs = pstmt.executeQuery();
-			rs.next();
 			
-			// Define section enrollment variables
-			String qtr = rs.getString("qtr");
-			String year = rs.getString("year");
-			String sectionId = rs.getString("section_id");
-			String units = rs.getString("units");
-			String grade = rs.getString("grade");
-			String classTitle = rs.getString("class_title");
-			
-			// Close everything
-			pstmt.close();
-			rs.close();
-			connection.close();
-			
-			
-			// Postgres setup
-			DriverManager.registerDriver(new org.postgresql.Driver());
-			connection = DriverManager.getConnection
-					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
-			
-			// Query setup
-			query = "SELECT grade_option FROM class WHERE class_title = ? AND qtr = ? AND year = ?";
-			pstmt = connection.prepareStatement(query);
-			pstmt.setString(1, classTitle);
-			pstmt.setString(2, "SPRING");
-			pstmt.setInt(3, 2018);
-			
-			// Execute query and show results
-			rs = pstmt.executeQuery();
-			rs.next();
-			
-			// Define class variables
-			String gradeOption = rs.getString("grade_option");
-			
-			%>
-				<table class="results-table">
+			while(rs.next()){
+				
+				// Define section enrollment variables
+				String qtr = rs.getString("qtr");
+				String year = rs.getString("year");
+				String sectionId = rs.getString("section_id");
+				String units = rs.getString("units");
+				String grade = rs.getString("grade");
+				String classTitle = rs.getString("class_title");
+				
+				// Postgres setup
+				DriverManager.registerDriver(new org.postgresql.Driver());
+				connection = DriverManager.getConnection
+						("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+				
+				// Query setup
+				query = "SELECT grade_option FROM class WHERE class_title = ? AND qtr = ? AND year = ?";
+				pstmt = connection.prepareStatement(query);
+				pstmt.setString(1, classTitle);
+				pstmt.setString(2, "SPRING");
+				pstmt.setInt(3, 2018);
+				
+				// Execute query and show results
+				ResultSet tempRs = pstmt.executeQuery();
+				tempRs.next();
+				
+				// Define class variables
+				String gradeOption = tempRs.getString("grade_option");
+				
+				%>
 					<tr>
-						<th>Class Title</th>
-						<th>Qtr</th>
-						<th>Year</th>
-						<th>Section ID</th>
-						<th>Units</th>
-						<th>Grade</th>
-						<th>Grade Option</th>
-					</tr>
-					
-					<tr>
-						
-						<tr><div id="table-title">Class</div></tr>
 						<td><input readonly type="text" value="<%= classTitle %>" name="class_title"></td> 
 						<td><input readonly type="text" value="<%= qtr %>" name="qtr"></td>
 						<td><input readonly type="text" value="<%= year %>" name="year"></td>
@@ -133,10 +128,11 @@
 						<td><input readonly type="text" value="<%= units %>" name="units"></td> 
 						<td><input readonly type="text" value="<%= grade %>" name="grade"></td>
 						<td><input readonly type="text" value="<%= gradeOption %>" name="grade_option"></td>
-						
 					</tr>
-				</table>
-			<%
+				<%
+				
+				tempRs.close();
+			}
 			
 			pstmt.close();
 			rs.close();
@@ -144,6 +140,7 @@
 		}
 		%>
 		
+			</table>
 		</body>
 	</head>
 </html>
