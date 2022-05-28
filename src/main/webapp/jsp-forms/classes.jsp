@@ -108,13 +108,15 @@
 						<td><input type="submit" value="Delete"></td> 
 						</form>
 					</tr>
+					<%
+			}
+					%>
 				</table>
 			</div>
 
 			<%@ page language="java" import="java.sql.*" %>
 			
 			<%
-			}
 			
 			try {
 				
