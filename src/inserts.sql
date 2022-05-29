@@ -612,7 +612,17 @@ INSERT INTO STUDENT_CLASSES VALUES ('100000004', 4, 'B', 'INTRODUCTION TO ARTIFI
 INSERT INTO STUDENT_CLASSES VALUES ('100000005', 4, 'C', 'INTRODUCTION TO ARTIFICIAL INTELLIGENCE', 'FALL', 2017, 'A00');
 
 
-
-
-
-
+-- Grade conversion
+INSERT INTO grade_conversion values ('A+', 4.3);
+INSERT INTO grade_conversion values('A', 4);
+INSERT INTO grade_conversion values('A-', 3.7);
+INSERT INTO grade_conversion values('B+', 3.4);
+INSERT INTO grade_conversion values('B', 3.1);
+INSERT INTO grade_conversion values('B-', 2.8);
+INSERT INTO grade_conversion values('C+', 2.5);
+INSERT INTO grade_conversion values('C', 2.2);
+INSERT INTO grade_conversion values('C-', 1.9);
+INSERT INTO grade_conversion values('D', 1.6);
+INSERT INTO grade_conversion values('S', 0.0);
+INSERT INTO grade_conversion values('U', -1.0);
+INSERT INTO grade_conversion values('IN', -2.0);
