@@ -318,7 +318,12 @@
 							}
 							
 							else if(dSid != null && dDegree != null){
-								
+								%>
+									<jsp:include page="report1_partD.jsp">
+								    	<jsp:param name="sid" value="<%= dSid %>"/>
+								    	<jsp:param name="degree" value="<%= dDegree %>"/>
+									</jsp:include>
+								<% 
 							}
 							
 							else if(eSid != null && eDegree != null){
