@@ -16,7 +16,7 @@
 			<jsp:include page="../html/sidebar.html"/>
 		</div>
 		
-		<h1>Report I</h1>
+		<h1>Report 1</h1>
 		
 		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>

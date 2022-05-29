@@ -160,20 +160,22 @@
 						float grade = (float) map.get(courseId).get(0);
 						int unit = (Integer) map.get(courseId).get(1);
 						
- 						// Student has passed the course (>= C- OR S)
-						if(grade >= 1.9){
+ 						// Student took the course for a letter grade
+						if(grade > 0){
 							
 							// Add the units to sumUnits and change gpa
 							sumUnits += unit;
 							gpa += unit * grade;
 						}
  						
-						else if(grade == 0){
+ 						// Student took the course pass/no pass
+						else if(grade == 0 || grade == -1){
+							
 							// Add the units to sumUnits
 							sumUnits += unit;
 						}
  						
- 						// Student did not pass the course, yet to complete
+ 						// Student had incomplete grade
 						else{
 							courseToComplete.add(courseId);
 						}
