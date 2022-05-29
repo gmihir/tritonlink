@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import ="java.util.ArrayList"%>
-<%@ page import="java.util.List" %>
+<%@ page import ="java.util.*"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -16,7 +15,7 @@
 			<jsp:include page="../html/sidebar.html"/>
 		</div>
 		
-		<h1>Report I</h1>
+		<h1>Report 1</h1>
 		
 		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>
@@ -26,9 +25,9 @@
 				<th>A. SID</th>
 				<th>B. Class Title</th>
 				<th>C. SID</th>
-				<th>D. SID</th>
+				<th>D. Student Name</th>
 				<th>D. Degree</th>
-				<th>E. SID</th>
+				<th>E. Student Name</th>
 				<th>E. Degree</th>
 			</tr>
 			
@@ -121,12 +120,12 @@
 							</select>
 						</td>
 						<td>
-							<select value="" name="d-sid">
+							<select value="" name="d-name">
 								<option disabled selected>-- select an option --</option>
 		
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			selectQuery = "select sid from student where sid not in (select sid from grad)";
+			selectQuery = "select * from student where sid not in (select sid from grad)";
 			
 			connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
@@ -134,11 +133,23 @@
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(selectQuery);
 			
+			Map<String, String> nameSid = new HashMap<String, String>();
+			int index = 0;
 			while(rs.next()) {
+				String middleName = "";
+				
+				if(rs.getString("middle_name") != null){
+					middleName = rs.getString("middle_name");
+				}
+				
+				String valueName = index + rs.getString("first_name") + middleName + rs.getString("last_name");
+				String displayName = rs.getString("first_name") + " " + middleName + " " + rs.getString("last_name");
+				
+				nameSid.put(valueName, rs.getString("sid"));
 				
 		%>
 			
-								<option value="<%= rs.getString("sid") %>"><%= rs.getString("sid") %></option>
+								<option value="<%= valueName %>"><%= displayName %></option>
 			
 		<%	}
 			rs.close();
@@ -179,12 +190,12 @@
 							</select>
 						</td>
 						<td>
-							<select value="" name="e-sid">
+							<select value="" name="e-name">
 								<option disabled selected>-- select an option --</option>
 
 		<%
 			DriverManager.registerDriver(new org.postgresql.Driver());
-			selectQuery = "select sid from grad";
+			selectQuery = "select * from student where sid in (select sid from grad)";
 			
 			connection = DriverManager.getConnection
 					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
@@ -193,10 +204,20 @@
 			rs = stmt.executeQuery(selectQuery);
 			
 			while(rs.next()) {
+				String middleName = "";
+				
+				if(rs.getString("middle_name") != null){
+					middleName = rs.getString("middle_name");
+				}
+				
+				String valueName = index + rs.getString("first_name") + middleName + rs.getString("last_name");
+				String displayName = rs.getString("first_name") + " " + middleName + " " + rs.getString("last_name");
+				
+				nameSid.put(valueName, rs.getString("sid"));
 				
 		%>
 			
-								<option value="<%= rs.getString("sid") %>"><%= rs.getString("sid") %></option>
+								<option value="<%= valueName %>"><%= displayName %></option>
 			
 		<%	}
 			rs.close();
@@ -262,9 +283,9 @@
 							String aSid = request.getParameter("a-sid");
 							String bClass = request.getParameter("b-class");
 							String cSid = request.getParameter("c-sid");
-							String dSid = request.getParameter("d-sid");
+							String dSid = nameSid.get(request.getParameter("d-name"));
 							String dDegree = request.getParameter("d-degree");
-							String eSid = request.getParameter("e-sid");
+							String eSid = nameSid.get(request.getParameter("e-name"));
 							String eDegree = request.getParameter("e-degree");
 							
 							// go through all possible cases and route page based on user input
