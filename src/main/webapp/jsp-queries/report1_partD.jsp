@@ -95,6 +95,147 @@
 			
 			
 			<% 
+			
+			// first need to get all category names
+			ArrayList<String> categories = new ArrayList<String>();
+			
+			String categoryQuery = "SELECT cat_name FROM categories WHERE deg_name = ? AND deg_level = 'BS' GROUP BY cat_name";
+			pstmt = connection.prepareStatement(categoryQuery);
+			
+			pstmt.setString(1, degree);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				categories.add(rs.getString("cat_name"));
+			}
+			rs.close();
+			pstmt.close();
+			
+			HashMap<String, Integer> categoryToUnits = new HashMap<String, Integer>();
+			
+			
+			for(int i = 0 ; i < categories.size() ; i++) {
+				String unitsQuery = "select min_units from categories where deg_name = ? and deg_level = 'BS' and cat_name = ? group by min_units";
+				pstmt = connection.prepareStatement(unitsQuery);
+				pstmt.setString(1, degree);
+				pstmt.setString(2, categories.get(i));
+				
+				// get units, add to map
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					categoryToUnits.put(categories.get(i), rs.getInt("min_units"));
+				}
+				pstmt.close();
+				rs.close();
+			}
+			
+			HashMap<String, ArrayList<String>> categoryToCourses = new HashMap<String, ArrayList<String>>();
+			
+			for(int i = 0; i < categories.size(); i++) {
+				String catCourseQuery = "select course_id from categories where deg_name = ? and deg_level = 'BS' and cat_name = ?";
+				pstmt = connection.prepareStatement(catCourseQuery);
+				pstmt.setString(1, degree);
+				pstmt.setString(2, categories.get(i));
+				
+				rs = pstmt.executeQuery();
+				
+				ArrayList<String> courses = new ArrayList<String>();
+				
+				while(rs.next()) {
+					courses.add(rs.getString("course_id"));
+				}
+				
+				categoryToCourses.put(categories.get(i), courses);
+				pstmt.close();
+				rs.close();
+			}
+						
+			// now get all courses the student has taken
+			HashMap<String, Integer> coursesTakenToUnits = new HashMap<String, Integer>();
+			
+			String courseQuery = "select c.course_id, s.units from class_courses c, student_classes s where s.sid = ? and c.class_title = s.class_title and c.qtr = s.qtr and c.year = s.year";
+			pstmt = connection.prepareStatement(courseQuery);
+			pstmt.setString(1, sid);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				coursesTakenToUnits.put(rs.getString("course_id"), rs.getInt("units"));
+			}
+						
+			// now, we need to calculate remaining requirements for the student
+			
+			HashMap<String, Integer> categoryToUnitsTaken = new HashMap<String, Integer>();
+					
+					
+			for(int i = 0 ; i < categories.size(); i++) {
+				
+				String currCat = categories.get(i);
+				
+				// find which courses the student has taken that correspond to this category
+				ArrayList<String> courses = categoryToCourses.get(currCat);
+				categoryToUnitsTaken.put(currCat,0);
+				
+				
+				for(String course : courses) {
+					// if the student has taken the course in the category, add the units
+					if(coursesTakenToUnits.containsKey(course)) {
+						int currUnitCount = categoryToUnitsTaken.get(currCat);
+						categoryToUnitsTaken.put(currCat, currUnitCount + coursesTakenToUnits.get(course));
+					}
+				}
+				
+			}
+			
+			int totalUnits = 0;
+			
+			for(String cat : categoryToUnits.keySet()) {
+				totalUnits += categoryToUnits.get(cat);
+			}
+			
+			int takenUnits = 0;
+			for(String cat : categoryToUnitsTaken.keySet()) {
+				takenUnits += categoryToUnitsTaken.get(cat);
+			}
+			
+			%>
+			
+			<h3>
+				In order to graduate with a BS degree in <%= degree %>, you need to take a total of <%= totalUnits %> units, broken down into these categories.
+			</h3>
+			
+			<br>
+			
+			<%
+				for(String cat : categoryToUnits.keySet()) {
+					%>
+					<%=cat %> : <%= categoryToUnits.get(cat) %> units 
+					<br />
+					<br />
+					<% 
+				}
+			%>
+			
+			<h3>
+				You still have to take at least <%= totalUnits - takenUnits %> units, broken down into the following categories.
+				<br/>
+			</h3>
+				<%
+					for(String cat : categoryToUnitsTaken.keySet()) {
+					%>
+						<%=cat %> : <%= Math.max(0, categoryToUnits.get(cat) - categoryToUnitsTaken.get(cat)) %> units 
+						<br />
+						<br />
+						<% 
+					}
+				%>
+			
+			
+			
+			<% 
+			
+			
 		
 			pstmt.close();
 			rs.close();
