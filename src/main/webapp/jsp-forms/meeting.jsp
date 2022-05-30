@@ -37,9 +37,9 @@
 					<td><input type="text" value="" name="class_title"></td> 
 					<td>
 						<select value="" name="qtr">
-						    <option value="Fall">Fall</option>
-						  	<option value="Winter">Winter</option>
-						  	<option value="Spring">Spring</option>
+						    <option value="FALL">Fall</option>
+						  	<option value="WINTER">Winter</option>
+						  	<option value="SPRING">Spring</option>
 						</select>
 					</td>
 					<td><input type="number" value="" name="year"></td>

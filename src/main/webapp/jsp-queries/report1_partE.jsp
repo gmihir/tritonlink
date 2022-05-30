@@ -197,23 +197,26 @@
 				tempRs.close();
 			}
 			
+			%>
+			<table class="results-table">
+				<tr>
+					<div id="table-title">Concentrations Completed</div>
+				</tr>
+				<tr>
+					<th>Concentration Name</th>
+				</tr>
+			<%
+			
 			for(String concentration : completedCon){
 				%>
-				<table class="results-table">
-					<tr>
-						<div id="table-title">Concentrations Completed</div>
-					</tr>
-					<tr>
-						<th>Concentration Name</th>
-					</tr>
 					<tr>
 						<td><input readonly type="text" value="<%= concentration %>" name="con_name"></td> 
 					</tr>
-				</table>
 				<%
 			}
 			
 			%>
+			</table>
 			<table class="results-table">
 				<tr>
 					<div id="table-title">Courses to Complete/Pass</div>
