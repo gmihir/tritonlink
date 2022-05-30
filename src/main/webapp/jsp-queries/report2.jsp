@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import ="java.util.*"%>
+
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -23,6 +25,9 @@
 		<table class="form-table"> 
 			<tr>
 				<th>A. Student Name</th>
+				<th>B. Class Section</th>
+				<th>B. Start Date</th>
+				<th>B. End Date</th>
 			</tr>
 			
 			<tr>
@@ -69,6 +74,48 @@
 							</select>
 						</td>
 						
+						<td>
+							<select value="" name="b-section-id">
+								<option disabled selected>-- select an option --</option>
+						
+								<%
+			DriverManager.registerDriver(new org.postgresql.Driver());
+			connection = DriverManager.getConnection
+					("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+			stmt = connection.createStatement();
+			
+			String sectionQuery = "select * from section_enrollment";
+			rs = stmt.executeQuery(sectionQuery);
+			
+			HashSet<String> sections = new HashSet<String>();
+			while(rs.next()) {	
+				
+				String classTitle = rs.getString("class_title");
+				String sectionId = rs.getString("section_id");
+				sections.add(classTitle + " --> " + sectionId);
+			}
+			
+			for(String sectionString : sections) {
+				%>
+				<option value="<%= sectionString %>"><%= sectionString %></option>
+				<%
+			}
+			rs.close();
+			connection.close();
+		%>
+				</select>
+				</td>
+				
+				<td>
+					<input name="startDate" type="date" min="2018-04-02" max="2018-06-15" required />
+				</td>
+				
+				<td>
+					<input name="endDate" type="date" min="2018-04-02" max="2018-06-15" required />
+				</td>
+		
+		
+						
 					<td><input type="submit" value="Search"></td>
 	  			</form>
 			</tr>
@@ -104,9 +151,42 @@
 								<%
 							}
 							
-/* 							else if(bClass != null){
+							
 
-							} */
+ 							else if( request.getParameter("b-section-id") != null && request.getParameter("startDate") != null
+ 									&& request.getParameter("endDate") != null) {
+								String sectionString = request.getParameter("b-section-id");
+								String startDate = request.getParameter("startDate");
+								String endDate = request.getParameter("endDate");
+								
+								String[] startValues = startDate.split("-");
+						        int startDay = Integer.parseInt(startValues[0]);
+						        int startMonth = Integer.parseInt(startValues[1]);
+						        int startYear = Integer.parseInt(startValues[2]);
+						        
+						        String[] endValues = endDate.split("-");
+						        int endDay = Integer.parseInt(endValues[0]);
+						        int endMonth = Integer.parseInt(endValues[1]);
+						        int endYear = Integer.parseInt(endValues[2]);
+							
+								int arrowIndex = sectionString.indexOf(" --> ");
+								String classTitle = sectionString.substring(0, arrowIndex);
+								String sectionId = sectionString.substring(arrowIndex+5);
+								
+								%>
+								
+								<jsp:include page="report2_partB.jsp">
+								    <jsp:param name="classTitle" value="<%= classTitle %>"/>
+   								    <jsp:param name="sectionId" value="<%= sectionId %>"/>
+   								    
+								    <jsp:param name="startDate" value="<%= startDate %>" />
+ 								    <jsp:param name="endDate" value="<%= endDate %>" />
+   								    
+								</jsp:include>
+								
+								<%
+							
+							} 
 						}
 					}
 				catch(Exception e) {
