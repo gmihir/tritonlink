@@ -162,8 +162,6 @@
 			</tr>
 			<%
 			
-			System.out.println("New One");
-			
 			// Loop through course by course
 			for(String courseId : courseMeetings.keySet()){
 				
@@ -247,7 +245,6 @@
 					
 				} // (Looping through sections) courseMeetings.get(courseId).keySet()
 				
-				System.out.println(courseId);
 				if(sectionConflict == courseMeetings.get(courseId).size()){
 					%>
 							<tr>
