@@ -1,10 +1,10 @@
 # TritonLink
 
 ## Useful Commands
-psql postgres -U username
-DROP DATABASE TRITONLINKDB;
-CREATE DATABASE TRITONLINKDB;
-\c tritonlinkdb
+psql postgres -U username\
+DROP DATABASE TRITONLINKDB;\
+CREATE DATABASE TRITONLINKDB;\
+\c tritonlinkdb\
 \i file-path
 
 ## How to build project
