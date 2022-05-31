@@ -51,16 +51,18 @@
 					pstmt.setString(2, courseId);
 					pstmt.setString(3, qtr);
 					
+					System.out.println(pstmt);
 					// Execute query and show results
 					ResultSet rs = pstmt.executeQuery();
 					
 					while(rs.next()){
 						query = "SELECT grade FROM student_classes WHERE class_title = ? AND qtr = ? AND year = ? AND section_id = ?";
+						pstmt = connection.prepareStatement(query);
 						pstmt.setString(1, rs.getString("class_title"));
 						pstmt.setString(2, rs.getString("qtr"));
 						pstmt.setInt(3, rs.getInt("year"));
 						pstmt.setString(4, rs.getString("section_id"));
-						
+						System.out.println(pstmt);
 						ResultSet tempRs = pstmt.executeQuery();
 						HashMap<String, Integer> gradeCount = new HashMap<String, Integer>();
 						
@@ -69,11 +71,11 @@
 							String grade = tempRs.getString("grade");
 							
 							// Check if the grade exists
-							if(gradeCount.containsKey(grade)){
+							if(!gradeCount.containsKey(grade)){
 								gradeCount.put(grade, 0);
 							}
 							
-							gradeCount.set(grade, gradeCount.get(grade) + 1);
+							gradeCount.put(grade, gradeCount.get(grade) + 1);
 						}
 						
 						// Loop through and add the html
