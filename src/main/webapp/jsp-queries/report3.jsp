@@ -102,11 +102,9 @@
 						String qtr = request.getParameter("qtr");
 						
 						// at minimum, the user has to select courseId
-						if(courseId != null){
-
+						if(courseId != null) {
 							// The user can only select a faculty next
-							if(facultyName != null){
-								
+							if(facultyName != null) {
 								// Course, faculty, and qtr will be put through
 								if(qtr != null){
 									%>
