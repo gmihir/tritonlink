@@ -108,15 +108,20 @@
 			rs.close();
 			
 			//now, we need to get all possible dates for review sessions
-			HashSet<Calendar> allPossibleDates = new HashSet<Calendar>();
-			Calendar currentTime = startCalendar;
+			LinkedHashSet<Calendar> allPossibleDates = new LinkedHashSet<Calendar>();
+			Calendar currentTime = (Calendar) startCalendar.clone();
 			long endTimeMs = endCalendar.getTimeInMillis();
 			long currMs = currentTime.getTimeInMillis();
-					
+			
+			System.out.println("currMs: " + currMs);
+			System.out.println("endTimeMs: " + endTimeMs);
+
 			
 			while(currMs < endTimeMs) {
 				// increment by an hour and add
-				allPossibleDates.add(currentTime);
+				Calendar toAdd = (Calendar) currentTime.clone();
+				allPossibleDates.add(toAdd);
+				System.out.println("adding possibility: " + currentTime.getTimeInMillis());
 				
 				// add 1 hour
 				currentTime.add(Calendar.HOUR_OF_DAY,1);
@@ -129,11 +134,46 @@
 				currMs = currentTime.getTimeInMillis();
 			}
 			
-			HashSet<Calendar> solution = new HashSet<Calendar>(allPossibleDates);
+			LinkedHashSet<Calendar> solution = new LinkedHashSet<Calendar>(allPossibleDates);
+			System.out.println("before: " + solution.size());
+			
+			HashMap<String, HashSet<String>> dayToConflictingCron = new HashMap<String, HashSet<String>>();
+			
+			for(String conflictingDate : conflictCronDates) {
+				String[] date = conflictingDate.split(" ");
+				
+				HashSet<String> conflictingDayArray = new HashSet<String>(Arrays.asList(date[5].split(",")));
+				
+				for(String day : conflictingDayArray) {
+					if(dayToConflictingCron.containsKey(day)) {
+						HashSet<String> crons = dayToConflictingCron.get(day);
+						crons.add(conflictingDate);
+						dayToConflictingCron.put(day,crons);
+					}
+					else {
+						HashSet<String> crons = new HashSet<String>();
+						crons.add(conflictingDate);
+						dayToConflictingCron.put(day,crons);
+					}
+				}
+			}
+			
+			System.out.println("Conflicts: ");
+			System.out.println(dayToConflictingCron);
 			
 			//now, we need to check and remove all possible dates for review sessions that are in conflict with cronDates
 			for(Calendar c : allPossibleDates) {
-				for(String conflictingDate : conflictCronDates) {
+				System.out.println("current:");
+				System.out.println(dayOfWeek.get(c.get(Calendar.DAY_OF_WEEK)) + " " + c.get(Calendar.HOUR_OF_DAY));
+				System.out.println(c.getTimeInMillis());
+				System.out.println("--------");
+				
+				String currentDayOfWeek = dayOfWeek.get(c.get(Calendar.DAY_OF_WEEK));
+				
+				if(!dayToConflictingCron.containsKey(currentDayOfWeek)) {
+					continue;
+				}
+				for(String conflictingDate : dayToConflictingCron.get(currentDayOfWeek)) {
 					String[] date = conflictingDate.split(" ");
 					
 					int duration = Integer.parseInt(date[0]);
@@ -143,27 +183,84 @@
 					int conflictTimeInMinutes = startHour * 60 + startMin;
 					int endConflictTimeInMinutes = conflictTimeInMinutes + duration;
 					
-					String[] daysOfWeek = date[5].split(",");
+					String[] conflictingDayArray = date[5].split(",");
 					
+					HashSet<String> conflictDays = new HashSet<String>(Arrays.asList(conflictingDayArray));
+					String calendarDay = dayOfWeek.get(c.get(Calendar.DAY_OF_WEEK));
+					System.out.println(conflictDays);
+					System.out.println(calendarDay);
+					boolean sameDay = conflictDays.contains(calendarDay);
 					//System.out.println("----------------");
 					
 					int startTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
 					int endTime = startTime +  60;
 					
-					if((startTime >= conflictTimeInMinutes && startTime <= endConflictTimeInMinutes) || 
-							(conflictTimeInMinutes >= startTime && conflictTimeInMinutes <= endConflictTimeInMinutes)) {
-						System.out.println("removing possibility");
-						solution.remove(c);
-					}
-/* 					System.out.println(c.get(Calendar.HOUR_OF_DAY));
-					System.out.println(c.get(Calendar.MINUTE));
-					System.out.println(dayOfWeek.get(c.get(Calendar.DAY_OF_WEEK)));
+					System.out.println("startTime: " + startTime);
+					System.out.println("endTime: " + endTime);
+					System.out.println("conflictTimeInMinutes: " + conflictTimeInMinutes);
+					System.out.println("endConflictTimeInMinutes: " + endConflictTimeInMinutes);
 
-					System.out.println(Arrays.toString(date));
-					System.out.println("----------------"); */
+					
+					if((startTime >= conflictTimeInMinutes && startTime < endConflictTimeInMinutes) || 
+							(conflictTimeInMinutes >= startTime && conflictTimeInMinutes < endTime)) {
+						System.out.println("removing possibility: " + conflictingDate);
+						System.out.println(dayOfWeek.get(c.get(Calendar.DAY_OF_WEEK)) + " " + c.get(Calendar.HOUR_OF_DAY));
+						solution.remove(c);
+						break;
+					}
 				}
 			}
 			
+			HashMap<Integer, String> monthLookup = new HashMap<Integer, String>();
+			monthLookup.put(0, "January");
+			monthLookup.put(1, "February");
+			monthLookup.put(2, "March");
+			monthLookup.put(3, "April");
+			monthLookup.put(4, "May");
+			monthLookup.put(5, "June");
+			monthLookup.put(6, "July");
+			monthLookup.put(7, "August");
+			monthLookup.put(8, "September");
+			monthLookup.put(9, "October");
+			monthLookup.put(10, "November");
+			monthLookup.put(11, "December");
+
+
+			%>
+			
+			<table class="results-table">
+			<tr>
+				<div id="table-title">Available Review Session Times</div>
+			</tr>
+			<tr>
+				<th>Month</th>
+				<th>Date</th>
+				<th>Day</th>
+				<th>Time</th>
+				
+			</tr>
+				 <%
+				 	for(Calendar c : solution) {
+				 		String month = monthLookup.get(c.get(Calendar.MONTH));
+				 		int date = c.get(Calendar.DATE);
+				 		String day = dayOfWeek.get(c.get(Calendar.DAY_OF_WEEK));
+				 		int startTime = c.get(Calendar.HOUR_OF_DAY);
+				 		int endTime = startTime + 1;
+				 		
+				 		%>
+							<tr>
+								<td><input readonly type="text" value="<%= month %>" name="month"></td> 
+								<td><input readonly type="text" value="<%= date %>" name="date"></td>
+								<td><input readonly type="text" value="<%= day %>" name="day"></td>
+								<td><input readonly type="text" value="<%= startTime %>:00 - <%= endTime %>:00" name="time"></td>
+								
+							</tr>
+ 				 		<%
+				 	}
+				 %>
+				</ul>
+			
+			<% 
 			
 			// Close everything
 			pstmt.close();

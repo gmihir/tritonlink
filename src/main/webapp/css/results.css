@@ -6,6 +6,7 @@ html {
 
 li {
 	font-size: 12px;
+	margin-bottom: 3px;
 }
 
 .results-table {
@@ -21,3 +22,4 @@ li {
 	font-weight: bold;
 	margin-bottom: 10px;
 }
+

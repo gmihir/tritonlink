@@ -107,11 +107,11 @@
 				</td>
 				
 				<td>
-					<input name="startDate" type="date" min="2018-04-02" max="2018-06-15" required />
+					<input name="startDate" type="date" min="2018-04-02" max="2018-06-15"  />
 				</td>
 				
 				<td>
-					<input name="endDate" type="date" min="2018-04-02" max="2018-06-15" required />
+					<input name="endDate" type="date" min="2018-04-02" max="2018-06-15"  />
 				</td>
 		
 		
@@ -181,7 +181,6 @@
    								    
 								    <jsp:param name="startDate" value="<%= startDate %>" />
  								    <jsp:param name="endDate" value="<%= endDate %>" />
-   								    
 								</jsp:include>
 								
 								<%
