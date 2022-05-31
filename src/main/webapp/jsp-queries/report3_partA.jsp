@@ -194,7 +194,27 @@
 			
 			// Course query
 			else{
+				%>
+				<tr>
+					<th>Grade</th>
+					<th>Count</th>
+				</tr>
+				<%
+				
+				String courseQuery = "select grade, count(grade) from student_classes where class_title IN (select distinct class_title from class_courses where course_id = ?) group by grade";
+				PreparedStatement pstmt = connection.prepareStatement(courseQuery);
+				pstmt.setString(1, courseId);
+				
+				ResultSet rs = pstmt.executeQuery();
 
+				while(rs.next()) {
+					%>
+						<tr>
+							<td><input readonly type="text" value="<%= rs.getString("grade") %>" name="grade"></td> 
+							<td><input readonly type="text" value="<%= rs.getString("count") %>" name="count"></td>
+						</tr>
+					<% 
+				}
 			}
 			connection.close();
 		}
