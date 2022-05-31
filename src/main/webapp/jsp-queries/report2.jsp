@@ -123,32 +123,28 @@
 			<%@ page language="java" import="java.sql.*" %>
 			
 				<%
-					try {
-						// Load Postgres Driver class file 
-						DriverManager.registerDriver(new org.postgresql.Driver());
+				try {
+					// Load Postgres Driver class file 
+					DriverManager.registerDriver(new org.postgresql.Driver());
+					
+					// Make a connection to the postgres datasource 
+					Connection conn = DriverManager.getConnection
+							("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+					
+					// Check if an insertion is requested
+					String action = request.getParameter("action"); 
+					if (action != null && action.equals("search")) {
 						
-						// Make a connection to the postgres datasource 
-						Connection conn = DriverManager.getConnection
-								("jdbc:postgresql:tritonlinkdb?user=username&password=password");
+						// define usert input parameters
+						String aSid = nameSid.get(request.getParameter("a-student-name"));
 						
-						// Check if an insertion is requested
-						String action = request.getParameter("action"); 
-					%>
-					<%
-						if (action != null && action.equals("search")) {
-							
-							// define usert input parameters
-							String aSid = nameSid.get(request.getParameter("a-student-name"));
-							
-							// go through all possible cases and route page based on user input
-							if(aSid != null){
-								%>
-								
-								<jsp:include page="report2_partA.jsp">
-								    <jsp:param name="sid" value="<%= aSid %>"/>
-								</jsp:include>
-								
-								<%
+						// go through all possible cases and route page based on user input
+						if(aSid != null){
+							%>
+							<jsp:include page="report2_partA.jsp">
+							    <jsp:param name="sid" value="<%= aSid %>"/>
+							</jsp:include>
+							<%
 							}
 							
 							
