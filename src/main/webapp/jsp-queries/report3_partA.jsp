@@ -89,7 +89,6 @@
 					ResultSet rs = pstmt.executeQuery();
 					
 					double gpa = 0;
-					
 					double totalCredits = 0;
 					double totalUnits = 0;
 					
@@ -107,7 +106,7 @@
 					gpaMap.put("D",1.6);
 					
 					while(rs.next()){
-						query = "SELECT units,grade FROM student_classes WHERE class_title = ? AND qtr = ? AND year = ? AND section_id = ?";
+						query = "SELECT units, grade FROM student_classes WHERE class_title = ? AND qtr = ? AND year = ? AND section_id = ?";
 						pstmt = connection.prepareStatement(query);
 						pstmt.setString(1, rs.getString("class_title"));
 						pstmt.setString(2, rs.getString("qtr"));
@@ -115,7 +114,6 @@
 						pstmt.setString(4, rs.getString("section_id"));
 						System.out.println(pstmt);
 						ResultSet tempRs = pstmt.executeQuery();
-						HashMap<String, Integer> gradeCount = new HashMap<String, Integer>();
 						
 						// Loop through all the grades
 						while(tempRs.next()){
@@ -125,32 +123,33 @@
 							if(gpaMap.containsKey(grade)) {
 								totalCredits += units * gpaMap.get(grade);
 								totalUnits += units;		
-							}
-
-							
-							// Check if the grade exists
-							if(!gradeCount.containsKey(grade)){
-								gradeCount.put(grade, 0);
-							}
-							
-							gradeCount.put(grade, gradeCount.get(grade) + 1);
-							
-							
+							}							
 						}
+						
 						gpa = totalCredits/totalUnits;
 						gpa = ((double)((int)(gpa *100.0)))/100.0;
-
-						// Loop through and add the html
-						for(String grade : gradeCount.keySet()){
-							%>
-								<tr>
-									<td><input readonly type="text" value="<%= grade %>" name="grade"></td> 
-									<td><input readonly type="text" value="<%= gradeCount.get(grade) %>" name="count"></td>
-								</tr>
-							<%
-						}
+						
 						tempRs.close();
 					}
+					
+					// Query for grade counts
+					query = "SELECT * FROM cpg WHERE faculty_name = ? AND course_id = ?";
+					pstmt = connection.prepareStatement(query);
+					pstmt.setString(1, facultyName);
+					pstmt.setString(2, courseId);
+					
+					rs = pstmt.executeQuery();
+					
+					// Loop through the grade's and their counts
+					while(rs.next()){
+						%>
+							<tr>
+								<td><input readonly type="text" value="<%= rs.getString("grade") %>" name="grade"></td> 
+								<td><input readonly type="text" value="<%= rs.getString("count") %>" name="count"></td>
+							</tr>
+						<%
+					}
+					
 					rs.close();
 					pstmt.close();
 					
