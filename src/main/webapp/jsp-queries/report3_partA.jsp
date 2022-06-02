@@ -42,53 +42,24 @@
 
 					
 					// Query setup
-					String query = "SELECT cs.class_title, cs.qtr, cs.year, cs.section_id " +
-									"FROM class_courses cc, class_section cs " +
-									"WHERE cs.faculty_name = ? AND cc.course_id = ? AND cc.qtr = ? " +
-									"AND cs.qtr = cc.qtr AND cs.year = cc.year " +
-									"AND cs.class_title = cc.class_title";
+					String query = "SELECT * FROM CPQG WHERE COURSE_ID = ? AND FACULTY_NAME = ? AND QTR = ?";
 					PreparedStatement pstmt = connection.prepareStatement(query);
-					pstmt.setString(1, facultyName);
-					pstmt.setString(2, courseId);
+					pstmt.setString(1, courseId);
+					pstmt.setString(2, facultyName);
 					pstmt.setString(3, qtr);
-					
-					System.out.println(pstmt);
 					// Execute query and show results
 					ResultSet rs = pstmt.executeQuery();
 					
 					while(rs.next()){
-						query = "SELECT grade FROM student_classes WHERE class_title = ? AND qtr = ? AND year = ? AND section_id = ?";
-						pstmt = connection.prepareStatement(query);
-						pstmt.setString(1, rs.getString("class_title"));
-						pstmt.setString(2, rs.getString("qtr"));
-						pstmt.setInt(3, rs.getInt("year"));
-						pstmt.setString(4, rs.getString("section_id"));
-						System.out.println(pstmt);
-						ResultSet tempRs = pstmt.executeQuery();
-						HashMap<String, Integer> gradeCount = new HashMap<String, Integer>();
-						
-						// Loop through all the grades
-						while(tempRs.next()){
-							String grade = tempRs.getString("grade");
-							
-							// Check if the grade exists
-							if(!gradeCount.containsKey(grade)){
-								gradeCount.put(grade, 0);
-							}
-							
-							gradeCount.put(grade, gradeCount.get(grade) + 1);
-						}
-						
-						// Loop through and add the html
-						for(String grade : gradeCount.keySet()){
+						String grade = rs.getString("grade");
+						String count = rs.getString("count");
 							%>
 								<tr>
 									<td><input readonly type="text" value="<%= grade %>" name="grade"></td> 
-									<td><input readonly type="text" value="<%= gradeCount.get(grade) %>" name="count"></td>
+									<td><input readonly type="text" value="<%= count %>" name="count"></td>
 								</tr>
 							<%
-						}
-						tempRs.close();
+						
 					}
 					rs.close();
 					pstmt.close();
