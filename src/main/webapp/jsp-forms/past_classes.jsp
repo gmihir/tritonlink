@@ -22,6 +22,7 @@
 		<table class="form-table"> 
 			<tr>
 				<th>Student ID</th>
+				<th>Units</th>
 				<th>Class Title</th>
 				<th>Quarter</th>
 				<th>Year</th>
@@ -33,6 +34,7 @@
 			<form action="past_classes.jsp" method="post">
 				<input type="hidden" value="insert" name="action"> 
 					<td> <input type="text" value="" name="sid"></td> 
+					<td><input type="number" value="" name="units"></td> 
 					<td><input type="text" value="" name="class_title"></td> 
 					<td><input type="text" value="" name="qtr"></td> 
 					<td><input type="number" value="" name="year"></td> 
@@ -61,6 +63,7 @@
 				
 				<input type="hidden" value="update" name="action"> 
 					<td><input readonly type="text" value="<%= rs.getString("sid") %>" name="sid"></td> 
+					<td><input type="number" value="<%= rs.getString("units") %>" name="units"></td>
 					<td><input readonly type="text" value="<%= rs.getString("class_title") %>" name="class_title"></td>
 					<td><input readonly type="text" value="<%= rs.getString("qtr") %>" name="qtr"></td>
 					<td><input readonly type="number" value="<%= rs.getString("year") %>" name="year"></td>
@@ -73,6 +76,7 @@
 				<form action="past_classes.jsp" method="post">
 					<input type="hidden" value="delete" name="action">
 					<input type="hidden" value="<%= rs.getString("sid") %>" name="sid">
+					<input type="hidden" value="<%= rs.getString("units") %>" name="units">
 					<input type="hidden" value="<%= rs.getString("class_title") %>" name="class_title">
 					<input type="hidden" value="<%= rs.getString("qtr") %>" name="qtr">
 					<input type="hidden" value="<%= rs.getString("year") %>" name="year">
@@ -109,15 +113,16 @@
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
 							// INSERT the student attrs INTO the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement("INSERT INTO student_classes VALUES (?,?, ?, ?,?,?); ");
+							PreparedStatement pstmt = conn.prepareStatement("INSERT INTO student_classes VALUES (?,?,?, ?, ?,?,?); ");
 														
 							
 							pstmt.setString(1, request.getParameter("sid"));
-							pstmt.setString(2,request.getParameter("grade")); 
-							pstmt.setString(3,request.getParameter("class_title")); 
-							pstmt.setString(4,request.getParameter("qtr")); 
-							pstmt.setInt(5,Integer.parseInt(request.getParameter("year"))); 
-							pstmt.setString(6,request.getParameter("section_id")); 
+							pstmt.setInt(2,Integer.parseInt(request.getParameter("units"))); 
+							pstmt.setString(3,request.getParameter("grade")); 
+							pstmt.setString(4,request.getParameter("class_title")); 
+							pstmt.setString(5,request.getParameter("qtr")); 
+							pstmt.setInt(6,Integer.parseInt(request.getParameter("year"))); 
+							pstmt.setString(7,request.getParameter("section_id")); 
 
 
 							pstmt.executeUpdate();
@@ -134,14 +139,15 @@
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to
 							// UPDATE the student attributes in the Student table. 
-							PreparedStatement pstatement = conn.prepareStatement("UPDATE student_classes SET grade = ? WHERE sid = ? AND class_title = ? AND qtr = ? AND year = ? AND section_id = ?");
+							PreparedStatement pstatement = conn.prepareStatement("UPDATE student_classes SET grade = ?, units = ? WHERE sid = ? AND class_title = ? AND qtr = ? AND year = ? AND section_id = ?");
 							
 							pstatement.setString(1, request.getParameter("grade"));
-							pstatement.setString(2, request.getParameter("sid"));
-							pstatement.setString(3, request.getParameter("class_title")); 
-							pstatement.setString(4, request.getParameter("qtr")); 
-							pstatement.setInt(5, Integer.parseInt(request.getParameter("year"))); 
-							pstatement.setString(6, request.getParameter("section_id")); 
+							pstatement.setInt(2, Integer.parseInt(request.getParameter("units"))); 
+							pstatement.setString(3, request.getParameter("sid"));
+							pstatement.setString(4, request.getParameter("class_title")); 
+							pstatement.setString(5, request.getParameter("qtr")); 
+							pstatement.setInt(6, Integer.parseInt(request.getParameter("year"))); 
+							pstatement.setString(7, request.getParameter("section_id")); 
 
 							pstatement.executeUpdate();
 							conn.commit();
@@ -156,7 +162,7 @@
 							conn.setAutoCommit(false);
 							// Create the prepared statement and use it to 
 							// DELETE the student FROM the Student table. 
-							PreparedStatement pstmt = conn.prepareStatement( "DELETE FROM student_classes WHERE sid = ? AND class_title = ? AND qtr = ? AND year = ? AND section_id = ? AND grade = ?");
+							PreparedStatement pstmt = conn.prepareStatement( "DELETE FROM student_classes WHERE sid = ? AND class_title = ? AND qtr = ? AND year = ? AND section_id = ? AND grade = ? AND units = ?");
 							
 							pstmt.setString(1, request.getParameter("sid"));
 							pstmt.setString(2, request.getParameter("class_title"));
@@ -164,6 +170,7 @@
 							pstmt.setInt(4, Integer.parseInt(request.getParameter("year")));
 							pstmt.setString(5, request.getParameter("section_id"));
 							pstmt.setString(6, request.getParameter("grade"));
+							pstmt.setInt(7, Integer.parseInt(request.getParameter("units")));
 
 
 							pstmt.executeUpdate();
