@@ -88,3 +88,28 @@ AFTER INSERT OR UPDATE
 ON student_classes
 FOR EACH ROW
 EXECUTE FUNCTION cpg_update();
+
+CREATE FUNCTION enrollment_check() RETURNS trigger AS $enrollment_check$
+DECLARE
+	enrollmentLimit int;
+	currentEnrollment int;
+BEGIN
+
+SELECT ENROLLMENT_LIMIT INTO enrollmentLimit FROM CLASS_SECTION WHERE SECTION_ID = NEW.SECTION_ID AND QTR = NEW.QTR AND YEAR = NEW.YEAR AND CLASS_TITLE = NEW.CLASS_TITLE;
+
+SELECT COUNT(SID) INTO currentEnrollment FROM SECTION_ENROLLMENT WHERE SECTION_ID = NEW.SECTION_ID AND QTR = NEW.QTR AND YEAR = NEW.YEAR AND CLASS_TITLE = NEW.CLASS_TITLE;
+
+IF (currentEnrollment >= enrollmentLimit) THEN
+	-- insert not allowed
+	RAISE EXCEPTION 'Enrollment Limit Reached.';
+END IF;
+
+RETURN NEW;
+END;
+$enrollment_check$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_enrollment_limit 
+BEFORE INSERT OR UPDATE
+ON section_enrollment
+FOR EACH ROW
+EXECUTE FUNCTION enrollment_check();

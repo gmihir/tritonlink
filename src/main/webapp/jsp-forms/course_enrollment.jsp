@@ -64,10 +64,10 @@
 				
 				<input type="hidden" value="update" name="action"> 
 					<td><input readonly type="text" value="<%= rs.getString("sid") %>" name="sid"></td> 
-					<td><input type="text" value="<%= rs.getString("class_title") %>" name="class_title"></td>
-					<td><input type="text" value="<%= rs.getString("qtr") %>" name="qtr"></td>
-					<td><input type="number" value="<%= rs.getString("year") %>" name="year"></td>
-					<td><input type="text" value="<%= rs.getString("section_id") %>" name="section_id"></td>
+					<td><input readonly type="text" value="<%= rs.getString("class_title") %>" name="class_title"></td>
+					<td><input readonly type="text" value="<%= rs.getString("qtr") %>" name="qtr"></td>
+					<td><input readonly type="number" value="<%= rs.getString("year") %>" name="year"></td>
+					<td><input readonly type="text" value="<%= rs.getString("section_id") %>" name="section_id"></td>
 					<td><input type="number" value="<%= rs.getString("units") %>" name="units"></td>
 					<td><input type="text" value="<%= rs.getString("grade") %>" name="grade"></td>
 
@@ -124,8 +124,6 @@
 							pstmt.setString(5, request.getParameter("sid"));
 							pstmt.setInt(6, Integer.parseInt(request.getParameter("units")));
 							pstmt.setString(7, request.getParameter("grade"));
-
-							
 
 							pstmt.executeUpdate();
 							conn.commit();
@@ -186,6 +184,13 @@
 				catch(Exception e) {
 					System.out.println("error:");
 					System.out.println(e.toString());
+
+					%>  
+						<div class="alert">
+						 	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+							  <%= e.toString() %>
+						</div>
+					<%
 				}
 				
 				%>
