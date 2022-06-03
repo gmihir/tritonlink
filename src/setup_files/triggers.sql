@@ -114,6 +114,8 @@ ON section_enrollment
 FOR EACH ROW
 EXECUTE FUNCTION enrollment_check();
 
+-- Part 4 Section 1
+
 CREATE FUNCTION meeting_check() RETURNS trigger AS $meeting_check$
 DECLARE
 	startTimeMinutes int;
@@ -190,3 +192,100 @@ BEFORE INSERT OR UPDATE
 ON section_meeting
 FOR EACH ROW
 EXECUTE FUNCTION meeting_check();
+
+
+
+-- Part 4 Section 2
+
+CREATE FUNCTION check_faculty_sections() RETURNS trigger AS $check_faculty_sections$
+DECLARE
+	startTimeMinutes int;
+	endTimeMinutes int;
+	duration int;
+	startMin int;
+	startHour int;
+	dayOfWeekString varchar;
+	existsStartTimeMinutes int;
+	existsEndTimeMinutes int;
+	existsDuration int;
+	existsStartMin int;
+	existsStartHour int;
+	existsDayOfWeek varchar;
+	isConflict int;
+	sameDay int;
+	currentDay varchar;
+	temprow RECORD;
+	cronDay varchar;
+
+	-- New Variables
+	meeting_type varchar;
+	all_section_meetings RECORD;
+BEGIN
+
+	-- If the faculty is staff, its a placeholder so exit
+	IF (NEW.faculty_name <> 'STAFF') THEN
+		RETURN NEW;
+	END IF;
+
+	-- Loop through all meetings for the section the faculty enrolled in
+	FOR temprow IN select * from section_meeting where class_title = NEW.class_title AND qtr = NEW.qtr AND year = NEW.year AND section_id = NEW.section_id
+	    LOOP
+
+    	-- Define the faculty's section meeting variables
+    	select into duration CAST( (select (string_to_array(temprow.cron_date, ' '))[1]) as int);
+		select into startMin CAST( (select (string_to_array(temprow.cron_date, ' '))[2]) as int);
+		select into startHour CAST( (select (string_to_array(temprow.cron_date, ' '))[3]) as int);
+		select into dayOfWeekString (string_to_array(temprow.cron_date, ' '))[6];
+
+		-- The meeting is not a regular type, so continue the loop
+		IF (temprow.meeting_type NOT IN ('REGULAR', 'LECTURE', 'DISCUSSION', 'LAB')) THEN
+			CONTINUE;
+		END IF;
+
+		-- Convert the faculty's time to minutes
+		isConflict = 0;
+		startTimeMinutes = startHour * 60 + startMin;
+		endTimeMinutes = startTimeMinutes + duration;
+
+		-- For all the other section's meetings the faculty is signed up for
+		FOR all_section_meetings IN select sm.* from class_section cs, section_meeting sm where cs.faculty_name = NEW.faculty_name AND cs.class_title = sm.class_title AND cs.qtr = sm.qtr AND cs.year = sm.year
+			LOOP
+
+			    -- Define the faculty's other section meeting variables
+				select into existsDuration CAST( (select (string_to_array(all_section_meetings.cron_date, ' '))[1]) as int);
+				select into existsStartMin CAST( (select (string_to_array(all_section_meetings.cron_date, ' '))[2]) as int);
+				select into existsStartHour CAST( (select (string_to_array(all_section_meetings.cron_date, ' '))[3]) as int);
+				select into existsDayOfWeek (string_to_array(all_section_meetings.cron_date, ' '))[6];
+			    
+			    -- Convert the meeting time to minutes
+			    existsStartTimeMinutes = existsStartHour*60 + existsStartMin;
+			    existsEndTimeMinutes = existsStartTimeMinutes + existsDuration;
+
+			    sameDay = 0; -- check if the crontabs contain the same day(s)
+
+			    -- For all the cron days in the OTHER section meeting
+			    FOR cronDay IN select (string_to_array(existsDayOfWeek, ','))
+				LOOP 
+					select into sameDay (select 1 as col where cronDay LIKE '%' || dayOfWeekString || '%');
+
+					EXIT WHEN sameDay = 1;
+				END LOOP;	
+
+				-- THERE IS A CONFLICT, ABORT MISSION
+			    IF (sameDay = 1 AND ( (startTimeMinutes >= existsStartTimeMinutes AND startTimeMinutes < existsEndTimeMinutes) OR (existsStartTimeMinutes >= startTimeMinutes AND existsStartTimeMinutes < endTimeMinutes) )) THEN 
+				    isConflict = 1;
+				    RAISE EXCEPTION '.';
+				    END IF;
+		END LOOP;
+
+    END LOOP;
+
+    RETURN NEW;
+END;
+$check_faculty_sections$ LANGUAGE plpgsql;
+
+CREATE TRIGGER faculty_section_update 
+BEFORE INSERT OR UPDATE
+ON class_section
+FOR EACH ROW
+EXECUTE FUNCTION check_faculty_sections();

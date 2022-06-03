@@ -48,13 +48,13 @@
 					<td><input type="number" value="" name="year"></td>
 					<td>
 						<select value="" name="grade_option">
-						    <option value="Letter Grade">Letter Grade</option>
+						    <option value="LETTER">LETTER</option>
 						  	<option value="P/NP">P/NP</option>
 						</select>
 					</td>
 					<td><input type="text" value="" name="section_id"></td>
 					<td><input type="number" value="" name="enrollment_limit"></td>
-					<td><input type="text" value="" name="faculty_name"></td>
+					<td><input readonly type="text" value="STAFF" name="faculty_name"></td>
 					<td><input type="text" value="" name="course_id"></td>
 					<!-- <td><button type="button" class="open-button" onclick="openForm()">Add Faculty</button></td> -->
 					
@@ -192,7 +192,7 @@
 							pstmt.setInt(pstmtIndex+2, Integer.parseInt(request.getParameter("year")));
 							pstmt.setString(pstmtIndex+3, sections[i]);
 							pstmt.setInt(pstmtIndex+4, Integer.parseInt(request.getParameter("enrollment_limit")));
-							pstmt.setString(pstmtIndex+5, request.getParameter("faculty_name"));
+							pstmt.setString(pstmtIndex+5, "STAFF");
 							
 							pstmtIndex += 6;
 				       	}
@@ -286,6 +286,13 @@
 			catch(Exception e){
 				System.out.println("Error:");
 				System.out.println(e.toString());
+				
+				%>  
+					<div class="alert">
+					 	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+						  <%= e.toString() %>
+					</div>
+				<%
 			}
 				
 			%>
