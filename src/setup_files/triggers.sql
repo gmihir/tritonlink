@@ -223,7 +223,7 @@ DECLARE
 BEGIN
 
 	-- If the faculty is staff, its a placeholder so exit
-	IF (NEW.faculty_name <> 'STAFF') THEN
+	IF (NEW.faculty_name = 'STAFF') THEN
 		RETURN NEW;
 	END IF;
 
@@ -258,7 +258,7 @@ BEGIN
 				select into existsDayOfWeek (string_to_array(all_section_meetings.cron_date, ' '))[6];
 			    
 			    -- Convert the meeting time to minutes
-			    existsStartTimeMinutes = existsStartHour*60 + existsStartMin;
+			    existsStartTimeMinutes = existsStartHour * 60 + existsStartMin;
 			    existsEndTimeMinutes = existsStartTimeMinutes + existsDuration;
 
 			    sameDay = 0; -- check if the crontabs contain the same day(s)
@@ -269,12 +269,12 @@ BEGIN
 					select into sameDay (select 1 as col where cronDay LIKE '%' || dayOfWeekString || '%');
 
 					EXIT WHEN sameDay = 1;
-				END LOOP;	
+				END LOOP;
 
 				-- THERE IS A CONFLICT, ABORT MISSION
 			    IF (sameDay = 1 AND ( (startTimeMinutes >= existsStartTimeMinutes AND startTimeMinutes < existsEndTimeMinutes) OR (existsStartTimeMinutes >= startTimeMinutes AND existsStartTimeMinutes < endTimeMinutes) )) THEN 
 				    isConflict = 1;
-				    RAISE EXCEPTION '.';
+				    RAISE EXCEPTION 'CONFLICTING MEETING TIMES.';
 				    END IF;
 		END LOOP;
 
@@ -283,6 +283,7 @@ BEGIN
     RETURN NEW;
 END;
 $check_faculty_sections$ LANGUAGE plpgsql;
+
 
 CREATE TRIGGER faculty_section_update 
 BEFORE INSERT OR UPDATE
