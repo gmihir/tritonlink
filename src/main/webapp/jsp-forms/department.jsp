@@ -99,8 +99,11 @@
 							conn.commit();
 							conn.setAutoCommit(true);
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("department.jsp"); 
+							%>
+								<script>
+									window.location.href = 'department.jsp';
+								</script>
+							<%  
 						}
 						else if (action != null && action.equals("update")) {
 							conn.setAutoCommit(false);
@@ -134,8 +137,11 @@
 							conn.commit();
 							conn.setAutoCommit(true);
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("department.jsp"); 
+							%>
+								<script>
+									window.location.href = 'department.jsp';
+								</script>
+							<%  
 						}
 					}
 				catch(Exception e) {

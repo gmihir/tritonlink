@@ -154,7 +154,7 @@
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
 							%>
 								<script>
-									window.location.href = '../jsp-forms/meeting.jsp';
+									window.location.href = 'meeting.jsp';
 								</script>
 							<% 
 							//response.sendRedirect("meeting.jsp"); 
@@ -187,7 +187,7 @@
 							
 							%>
 								<script>
-									window.location.href = '../jsp-forms/meeting.jsp';
+									window.location.href = 'meeting.jsp';
 								</script>
 							<% 
 							//response.sendRedirect("meeting.jsp"); 
@@ -217,7 +217,7 @@
 							//response.sendRedirect("meeting.jsp"); 
 							%>
 								<script>
-									window.location.href = '../jsp-forms/meeting.jsp';
+									window.location.href = 'meeting.jsp';
 								</script>
 							<% 
 						}

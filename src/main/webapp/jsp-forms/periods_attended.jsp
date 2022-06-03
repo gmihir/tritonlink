@@ -139,8 +139,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("periods_attended.jsp"); 
+							%>
+								<script>
+									window.location.href = 'periods_attended.jsp';
+								</script>
+							<%   
 						}
 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
@@ -196,7 +199,11 @@
 							pstmt.close();
 							conn.close();
 							
-							response.sendRedirect("periods_attended.jsp"); 
+							%>
+								<script>
+									window.location.href = 'periods_attended.jsp';
+								</script>
+							<%   
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -217,8 +224,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("periods_attended.jsp"); 
+							%>
+								<script>
+									window.location.href = 'periods_attended.jsp';
+								</script>
+							<%   
 						}
 					}
 				catch(Exception e) {

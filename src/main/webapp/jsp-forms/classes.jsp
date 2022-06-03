@@ -275,7 +275,11 @@
 					/* FIX THIS TO RESOLVE DUPLICATE BUG*/
 					conn.close();
 					rs.close();
-					response.sendRedirect("classes.jsp");
+					%>
+						<script>
+							window.location.href = 'classes.jsp';
+						</script>
+					<% 				
 				}
 			}
 			

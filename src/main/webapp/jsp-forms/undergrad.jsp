@@ -154,8 +154,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("undergrad.jsp"); 
+							%>
+								<script>
+									window.location.href = 'undergrad.jsp';
+								</script>
+							<% 
 						}
 						else if (action != null && action.equals("update")) {
 							conn.setAutoCommit(false);
@@ -189,7 +192,11 @@
 							pstatement.close();
 							conn.close();
 							
-							response.sendRedirect("undergrad.jsp"); 
+							%>
+								<script>
+									window.location.href = 'undergrad.jsp';
+								</script>
+							<% 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -206,8 +213,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("undergrad.jsp"); 
+							%>
+								<script>
+									window.location.href = 'undergrad.jsp';
+								</script>
+							<%  
 						}
 					}
 				catch(Exception e) {

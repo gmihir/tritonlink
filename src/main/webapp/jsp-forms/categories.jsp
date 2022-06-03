@@ -148,8 +148,11 @@
 							conn.commit();
 							conn.setAutoCommit(true);
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("categories.jsp"); 
+							%>
+								<script>
+									window.location.href = 'categories.jsp';
+								</script>
+							<% 
 						}
 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
@@ -171,7 +174,11 @@
 							conn.commit();
 							conn.setAutoCommit(true);
 							
-							response.sendRedirect("categories.jsp"); 
+							%>
+								<script>
+									window.location.href = 'categories.jsp';
+								</script>
+							<% 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -189,7 +196,11 @@
 							conn.setAutoCommit(true);
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("categories.jsp"); 
+							%>
+								<script>
+									window.location.href = 'categories.jsp';
+								</script>
+							<% 						
 						}
 					}
 				catch(Exception e) {

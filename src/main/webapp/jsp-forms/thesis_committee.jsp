@@ -145,8 +145,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("thesis_committee.jsp"); 
+							%>
+								<script>
+									window.location.href = 'thesis_committee.jsp';
+								</script>
+							<%  
 						}
 /* 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
@@ -188,8 +191,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("thesis_committee.jsp"); 
+							%>
+								<script>
+									window.location.href = 'thesis_committee.jsp';
+								</script>
+							<%  
 						}
 					}
 				catch(Exception e) {

@@ -14,7 +14,7 @@
 			<jsp:include page="../html/sidebar.html"/>
 		</div>
 		
-		<h1>Concetration Courses</h1>
+		<h1>Concentration Courses</h1>
 		
 		<div class="form">
 				<%@ page language="java" import="java.sql.*" %>
@@ -108,7 +108,11 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("concentration_courses.jsp"); 
+							%>
+								<script>
+									window.location.href = 'concentration_courses.jsp';
+								</script>
+							<% 
 						}
 /* 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
@@ -147,8 +151,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("concentration_courses.jsp"); 
+							%>
+								<script>
+									window.location.href = 'concentration_courses.jsp';
+								</script>
+							<% 
 						}
 					}
 				catch(Exception e) {

@@ -126,8 +126,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("course.jsp"); 
+							%>
+								<script>
+									window.location.href = 'course.jsp';
+								</script>
+							<%  
 						}
 						else if (action != null && action.equals("update")) {
 							conn.setAutoCommit(false);
@@ -149,7 +152,11 @@
 							pstatement.close();
 							conn.close();
 							
-							response.sendRedirect("course.jsp"); 
+							%>
+								<script>
+									window.location.href = 'course.jsp';
+								</script>
+							<%  
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -166,8 +173,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("course.jsp"); 
+							%>
+								<script>
+									window.location.href = 'course.jsp';
+								</script>
+							<%  
 						}
 					}
 				catch(Exception e) {

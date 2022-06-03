@@ -132,8 +132,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("past_classes.jsp"); 
+							%>
+								<script>
+									window.location.href = 'past_classes.jsp';
+								</script>
+							<%   
 						}
 						else if (action != null && action.equals("update")) {
 							conn.setAutoCommit(false);
@@ -156,7 +159,11 @@
 							pstatement.close();
 							conn.close();
 							
-							response.sendRedirect("past_classes.jsp"); 
+							%>
+								<script>
+									window.location.href = 'past_classes.jsp';
+								</script>
+							<%    
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -180,8 +187,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("past_classes.jsp"); 
+							%>
+								<script>
+									window.location.href = 'past_classes.jsp';
+								</script>
+							<%    
 						}
 					}
 				catch(Exception e) {

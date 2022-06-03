@@ -154,8 +154,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("phd.jsp"); 
+							%>
+								<script>
+									window.location.href = 'phd.jsp';
+								</script>
+							<%   
 						}
 						else if (action != null && action.equals("update")) {
 							conn.setAutoCommit(false);
@@ -188,7 +191,11 @@
 							pstatement.close();
 							conn.close();
 							
-							response.sendRedirect("phd.jsp"); 
+							%>
+								<script>
+									window.location.href = 'phd.jsp';
+								</script>
+							<%   
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -205,8 +212,11 @@
 							pstmt.close();
 							conn.close();
 
-							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("phd.jsp"); 
+							%>
+								<script>
+									window.location.href = 'phd.jsp';
+								</script>
+							<%  
 						}
 					}
 				catch(Exception e) {
