@@ -195,7 +195,7 @@ EXECUTE FUNCTION meeting_check();
 
 
 
--- Part 4 Section 2
+-- Part 4 Section 2.1
 
 CREATE FUNCTION check_faculty_sections() RETURNS trigger AS $check_faculty_sections$
 DECLARE
@@ -290,3 +290,31 @@ BEFORE INSERT OR UPDATE
 ON class_section
 FOR EACH ROW
 EXECUTE FUNCTION check_faculty_sections();
+
+
+
+-- Part 4 Section 2.1
+
+CREATE FUNCTION check_meeting_section() RETURNS trigger AS $check_meeting_section$
+DECLARE
+	facultyName varchar;
+BEGIN
+
+	-- Get the faculty name from the inserted/updated section_meeting
+	select faculty_name into facultyName from class_section where NEW.class_title = class_title AND NEW.qtr = qtr AND NEW.year = year AND NEW.section_id = section_id;
+
+	-- If the faculty is staff, its a placeholder so exit
+	IF (facultyName <> 'STAFF') THEN
+		RAISE EXCEPTION 'CANNOT CREATE MEETING AFTER ASSIGNING TO A FACULTY.';
+	END IF;
+
+	RETURN NEW;
+END;
+$check_meeting_section$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER meeting_section_update 
+BEFORE INSERT OR UPDATE
+ON section_meeting
+FOR EACH ROW
+EXECUTE FUNCTION check_meeting_section();
