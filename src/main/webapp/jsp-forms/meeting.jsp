@@ -152,7 +152,12 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("meeting.jsp"); 
+							%>
+								<script>
+									window.location.href = '../jsp-forms/meeting.jsp';
+								</script>
+							<% 
+							//response.sendRedirect("meeting.jsp"); 
 						}
 						else if (action != null && action.equals("update")) {
 							System.out.println("in update");
@@ -180,7 +185,12 @@
 							pstmt.close();
 							conn.close();
 							
-							response.sendRedirect("meeting.jsp"); 
+							%>
+								<script>
+									window.location.href = '../jsp-forms/meeting.jsp';
+								</script>
+							<% 
+							//response.sendRedirect("meeting.jsp"); 
 						}
 						else if (action != null && action.equals("delete")) {
 							conn.setAutoCommit(false);
@@ -204,13 +214,27 @@
 							conn.close();
 
 							/* FIX THIS TO RESOLVE DUPLICATE BUG*/
-							response.sendRedirect("meeting.jsp"); 
+							//response.sendRedirect("meeting.jsp"); 
+							%>
+								<script>
+									window.location.href = '../jsp-forms/meeting.jsp';
+								</script>
+							<% 
 						}
 					}
 				catch(Exception e) {
 					System.out.println("error:");
 					System.out.println(e.toString());
+					
+					%>  
+						<div class="alert">
+						 	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+							  <%= e.toString() %>
+						</div>
+					<%
 				}
+				
+				
 				
 				%>
 			
